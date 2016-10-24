@@ -1,4 +1,4 @@
-NowFab -  Federated authentication portal based on COmanage 
+NowFap -  NOn Web Federated Authentication Portal 
 ======
 
 This project deploys COmanage using Ansible as a portal to handle various non-web SSO scenarios
