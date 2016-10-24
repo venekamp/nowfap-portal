@@ -1,0 +1,7 @@
+---
+# playbook to install and configure general components of a VOPaaS machine
+
+- hosts: all
+  roles:
+    - comanage
+  name: install and configure generic services

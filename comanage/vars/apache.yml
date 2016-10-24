@@ -1,0 +1,31 @@
+---
+modules:
+  - mpm_prefork
+  - ssl
+  - status
+  - cgid
+  - cgi
+#  - fastcgi
+  - actions
+  - alias
+  - php5.6
+  - rewrite
+  - auth_mellon
+  - authn_core
+  - authz_user
+
+conf:
+  - php5.6-fpm
+
+disable_modules:
+    #  - mpm_prefork
+  - php7.0
+
+restart:
+  - apache2
+#  - php5-fpm
+
+apache_config_files:
+  - { src: comanage/templates/apache.conf.j2,           dest: /etc/apache2/sites-available/default.conf         }
+  - { src: comanage/templates/apache2-comanage.conf.j2, dest: /etc/apache2/conf-available/apache2-comanage.conf }
+  - { src: comanage/templates/auth_mellon.conf.j2,      dest: /etc/apache2/conf-available/auth_mellon.conf      }

@@ -1,0 +1,30 @@
+---
+registry_path: "/var/www/html/registry"
+
+www_user: "www-data"
+admin_given_name: "Ubuntu"
+admin_family_name: "Ubuntu 16-04"
+admin_username: "ubuntu@localhost"
+enable_pooling: "Yes"
+registry_db: "registry"
+registry_users_table: "cm_users"
+
+
+replace:
+#  -
+#   regexp: "'datasource' => 'Database/Mysql'"
+#   replace: "'datasource' => 'Database/Postgres'"
+  -
+   regexp: "'login' => 'user'"
+   replace: "'login' => 'comanage'"
+  -
+   regexp: "'password' => 'password'"
+   replace: "'password' => 'C0man4ge'"
+  -
+   regexp: "'database' => 'database_name'"
+   replace: "'database' => 'registry'"
+
+infodb:
+  -
+   regexp: "you@localhost"
+   replace: "admin@example.it"

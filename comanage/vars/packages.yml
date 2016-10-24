@@ -1,0 +1,31 @@
+---
+removerepository:
+  - deb http://security.debian.org/ jessie/updates main contrib non-free
+  - deb-src http://security.debian.org/ jessie/updates main contrib non-free
+
+packages:
+  - apache2
+  - php5.6
+  - php5.6-fpm
+  - mysql-client
+  - mysql-server
+  - php5.6-mysql
+  - libpq-dev
+  - libmysqlclient-dev
+  - python-mysqldb
+  - libapache2-mod-php5.6
+  - php5.6-mcrypt
+  - php5.6-xsl
+  - php5.6-mbstring
+  - libapache2-mod-auth-mellon
+
+packagesfastcgi:
+  - libapache2-mod-fastcgi
+  - apache2-mpm-worker
+
+repositories:
+  - deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
+    #  - deb http://ftp.es.debian.org/debian stable main contrib non-free
+    #  - deb-src http://ftp.es.debian.org/debian stable main contrib non-free
+    #  - deb http://ftp.debian.org/debian/ jessie-updates main contrib non-free
+    #  - deb-src http://ftp.debian.org/debian/ jessie-updates main contrib non-free

@@ -1,0 +1,36 @@
+---
+# playbook to install and configure general components of a Comanage machine
+
+#- name: Check php software
+#  service:
+#    state: started
+#    name: php5-fpm
+
+#- name: Create php5 folder
+#  file: path=/etc/php5/php-fpm state=directory mode=0755
+
+#- name: add php5-fpm.conf to conf-available
+#  template:
+#    src: comanage/templates/php5-fpm.conf.j2
+#    dest: /etc/apache2/conf-available/php5-fpm.conf
+
+#- name: add php5-fpm.conf to conf-enabled
+#  template:
+#    src: comanage/templates/php5-fpm.conf.j2
+#    dest: /etc/apache2/conf-enabled/php5-fpm.conf
+
+#- name: change php.ini
+#  template:
+#    src: comanage/templates/php.ini.j2
+#    dest: /etc/php5/php-fpm/php.ini
+
+#- name: touch php5-fpm
+#  file:
+#    path: /usr/lib/cgi-bin/php5-fcgi
+#    state: touch
+#    mode: 0755
+#    owner: www-data
+#    group: www-data
+
+- name: Ensure php5.6 is used when php is called
+  command: update-alternatives --set php /usr/bin/php5.6

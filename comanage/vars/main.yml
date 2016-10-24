@@ -1,0 +1,4 @@
+---
+### COmanage vars main.yml
+  # The version of COmanage to pull
+  comanage_version: 1.0.5

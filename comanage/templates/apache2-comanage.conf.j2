@@ -1,0 +1,16 @@
+<IfModule mod_php5.c>
+    <FilesMatch "\.ph(p|tml)$">
+        SetHandler application/x-httpd-php
+    </FilesMatch>
+    <FilesMatch "\.phps$">
+        SetHandler application/x-httpd-php-source
+    </FilesMatch>
+</IfModule>
+
+<Directory "/var/www/html/registry">
+    Options Indexes FollowSymLinks
+    DirectoryIndex index.php
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+</Directory>

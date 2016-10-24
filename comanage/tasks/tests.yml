@@ -1,0 +1,26 @@
+---
+# Tests for the generic tasks
+- include_vars: "comanage/vars/ntp.yml"
+- include_vars: "comanage/vars/zerotier.yml"
+
+- name: Get time drift
+  command: /usr/sbin/ntptime
+  register: thetime
+  changed_when: false
+
+- name: Raise error if differente is larger than acceptable difference
+  fail:
+    msg: "ERROR: The time difference is NOT ok"
+  when: "{{ thetime['stdout_lines'] | regex_replace('^.*offset (\\d+.\\d+).*$', '\\1') | float * 1000 > item }}"
+  with_items: time_difference
+
+- name: Get the zerotier network list
+  command: zerotier-cli listnetworks
+  register: listnetworks
+  changed_when: false
+
+- name: Raise error if the network searched is not in network list
+  fail:
+    msg: "ERROR: the network is not in the list of networks for zerotier client"
+  when: "\"200 listnetworks {{ networkid }}\" in thetime['stdout']"
+  with_items: time_difference

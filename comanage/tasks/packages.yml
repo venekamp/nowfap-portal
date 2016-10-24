@@ -1,0 +1,34 @@
+---
+- include_vars: "comanage/vars/packages.yml"
+
+#Command for switch from apache2_handler to php-fpm
+#- name: Remove a repo
+#  apt_repository:
+#    repo: "{{ item }}"
+#    state: present
+#    update_cache: no
+#  with_items: removerepository
+
+- name: Ensure all necessary reposirories are present
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items: "{{ repositories }}"
+
+- name: perform apt-get update
+  apt:
+    update_cache: yes
+    cache_valid_time: 360
+
+- name: ensure that packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages  }}"
+
+#- name: install php-fpm packages
+#  apt:
+#    name: "{{ item }}"
+#    state: present
+#  with_items: packagesfastcgi
+
