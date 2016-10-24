@@ -12,17 +12,18 @@
 #- name: enable apache mpm_worker module manually
 #  command: a2enmod mpm_worker
 
-- name: Ensure some modules are not activated
-  apache2_module:
-    state: absent
-    name: "{{ item }}"
-  with_items: "{{ disable_modules }}"
+#- name: Ensure some modules are not activated
+#  apache2_module:
+#    state: absent
+#    name: "{{ item }}"
+#  with_items: "{{ disable_modules }}"
 
 - name: Activate apache modules
   apache2_module:
     state: present
     name: "{{ item }}"
   with_items: "{{ modules }}"
+  become: yes
 
 - name: push the template for apache config files
   template:
@@ -31,9 +32,11 @@
     #    src: comanage/templates/apache.conf.j2
     #    dest: /etc/apache2/sites-available/default.conf
   with_items: "{{ apache_config_files }}"
+  become: yes
 
-- name: eneable COmanage site
+- name: enable COmanage site
   command: a2ensite default
+  become: yes
 
   #- name: Ensure COmanage config is available
   #  template:
@@ -42,9 +45,11 @@
 
 - name: Enable config COmanage configuration
   command: a2enconf apache2-comanage
+  become: yes
 
 - name: restart services
   service:
     name: "{{ item }}"
     state: restarted
   with_items: "{{ restart }}"
+  become: yes
