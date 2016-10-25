@@ -232,7 +232,8 @@
     # If this option is unset, then mod_auth_mellon will return a
     # 400 Bad Request error if the cookie is missing.
     # Default: unset
-    MellonNoCookieErrorPage "https://example.com/no_cookie.html"
+    #MellonNoCookieErrorPage "https://example.com/no_cookie.html"
+    MellonNoCookieErrorPage "https://172.29.191.100/no_cookie.html"
 
     # MellonSPMetadataFile is the full path to the file containing
     # the metadata for this service provider.
@@ -326,6 +327,7 @@
     #
     # Default: None set.
     #MellonDiscoveryURL "http://www.example.net/idp-discovery"
+    MellonDiscoveryURL "https://engine.surfconext.nl/authentication/idp/single-sign-on"
 
     # MellonProbeDiscoveryTimeout sets the timeout of the
     # IdP probe discovery service, which is available on the

@@ -24,7 +24,7 @@
     src: "{{ output_dir }}/{{entity_id }}.xml"
     dest: "/etc/apache2/mellon/sp-metadata.xml"
     remote_src: True
-    owner: root
+    owner: www-data
     mode: 0644
   notify:
     - Restart Apache
