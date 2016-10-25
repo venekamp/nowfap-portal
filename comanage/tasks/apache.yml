@@ -25,29 +25,22 @@
   with_items: "{{ modules }}"
   become: yes
 
-- name: push the template for apache config files
+- name: Push the template for apache config files
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    #    src: comanage/templates/apache.conf.j2
-    #    dest: /etc/apache2/sites-available/default.conf
   with_items: "{{ apache_config_files }}"
   become: yes
 
-- name: enable COmanage site
+- name: Eneable COmanage site
   command: a2ensite default
   become: yes
-
-  #- name: Ensure COmanage config is available
-  #  template:
-    #    src: comanage/templates/apache2-comanage.conf.j2
-    #    dest: /etc/apache2/conf-available/apache2-comanage.conf
 
 - name: Enable config COmanage configuration
   command: a2enconf apache2-comanage
   become: yes
 
-- name: restart services
+- name: Restart Apache and related services
   service:
     name: "{{ item }}"
     state: restarted

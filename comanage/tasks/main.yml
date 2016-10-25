@@ -2,19 +2,11 @@
 # playbook to install and configure general components of a VOPaaS machine
 
 - include: packages.yml
+- include: auth_mellon.yml
 - include: php.yml
 - include: apache.yml
 - include: mysql.yml
 - include: comanage.yml
 
-#- include: php.yml
-
-#- include: mysql.yml
-#uncomment for switch to php-fpm
-#- include: php.yml
-
-
-#- include: comanage.yml
 # Test tasks provided to verify all installations went good and with no errors
-
 #- include: tests.yml

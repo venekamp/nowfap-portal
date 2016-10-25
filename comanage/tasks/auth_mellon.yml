@@ -25,6 +25,8 @@
     remote_src: True
     owner: root
     mode: 0644
+  notify:
+    - Restart Apache
 
 - name: Copy key
   copy:
@@ -33,6 +35,8 @@
     remote_src: True
     owner: www-data
     mode: 0600
+  notify:
+    - Restart Apache
 
 - name: Copy cert
   copy:
@@ -41,3 +45,5 @@
     remote_src: True
     owner: www-data
     mode: 0600
+  notify:
+    - Restart Apache

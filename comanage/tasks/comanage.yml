@@ -4,7 +4,7 @@
   # (No need to clone git repo with extra files)
   - include_vars: comanage/vars/comanage.yml
 
-  - name: CreaGGte target directories
+  - name: Create target directories
     file:
       path: "{{ item.path }}"
       state: "{{ item.state }}"
