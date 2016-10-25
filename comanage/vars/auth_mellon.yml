@@ -1,0 +1,4 @@
+---
+output_dir: "/home/ubuntu/auth_mellon"
+entity_id: mellon
+endpoint_url: https://myendpoint.example.org/mellon
