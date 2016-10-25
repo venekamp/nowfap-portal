@@ -34,3 +34,4 @@
 
 - name: Ensure php5.6 is used when php is called
   command: update-alternatives --set php /usr/bin/php5.6
+  become: yes
