@@ -37,7 +37,8 @@
   become: yes
 
 - name: Enable config COmanage configuration
-  command: a2enconf apache2-comanage
+  command: a2enconf {{ item }}
+  with_items: "{{ apache_enable_conf }}"
   become: yes
 
 - name: Restart Apache and related services
