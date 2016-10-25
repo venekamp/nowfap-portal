@@ -7,6 +7,7 @@
 - include: apache.yml
 - include: mysql.yml
 - include: comanage.yml
+- include: surfconext.yml
 
 # Test tasks provided to verify all installations went good and with no errors
 #- include: tests.yml

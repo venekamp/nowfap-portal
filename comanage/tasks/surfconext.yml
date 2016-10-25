@@ -1,0 +1,25 @@
+---
+- name: Ensure directory exists
+  file:
+    path: /etc/apache2/mellon/surfconext
+    state: directory
+    owner: www-data
+    mode: 0755
+
+- name: Obtain SURFconext certificate
+  get_url:
+    url: https://engine.surfconext.nl/authentication/idp/certificate
+    dest: /etc/apache2/mellon/surfconext/certificate.pem
+    owner: www-data
+    mode: 0600
+  notify:
+    - Restart Apache
+
+- name: Get the SURFConext metadata
+  get_url:
+    url: https://engine.surfconext.nl/authentication/idp/metadata
+    dest: /etc/apache2/mellon/surfconext/idp-metadata.xml
+    owner: www-data
+    mode: 0600
+  notify:
+    - Restart Apache

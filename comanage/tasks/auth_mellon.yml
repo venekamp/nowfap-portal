@@ -10,12 +10,13 @@
     path: /var/cache/mod_auth_mellon_postdata
     state: directory
     owner: www-data
-    mode: 0700
+    mode: 0755
 
 - name: Create a directory metadata for auth_mellon is stored
   file:
     path: /etc/apache2/mellon
     state: directory
+    owner: www-data
     mode: 0700
 
 - name: Copy SP meta data
