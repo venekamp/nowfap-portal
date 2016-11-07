@@ -81,7 +81,9 @@ fi
 HOST="$(echo "$BASEURL" | sed 's#^[a-z]*://\([^/]*\).*#\1#')"
 BASEURL="$(echo "$BASEURL" | sed 's#/$##')"
 
-OUTFILE="$output_dir/$(echo "$ENTITYID" | sed 's/[^0-9A-Za-z.]/_/g' | sed 's/__*/_/g')"
+HOST_ENTITYID=$(echo "$ENTITYID" | sed 's/\(http[s]\?:\/\/\)\([^\/]*\)\/.*/\2/')
+
+OUTFILE="$output_dir/$(echo "$HOST_ENTITYID" | sed 's/[^0-9A-Za-z.-]/_/g' | sed 's/__*/_/g')"
 echo "Output files:"
 echo "Private key:               $OUTFILE.key"
 echo "Certificate:               $OUTFILE.cert"
