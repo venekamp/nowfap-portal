@@ -18,6 +18,7 @@ packages:
   - php5.6-xsl
   - php5.6-mbstring
   - libapache2-mod-auth-mellon
+  - python-letsencrypt-apache
 
 packagesfastcgi:
   - libapache2-mod-fastcgi
