@@ -24,6 +24,9 @@
     name: "{{ item }}"
   with_items: "{{ modules }}"
   become: yes
+  # This is ugly, but Ansible 2.2.0 has a regression which makes this task fail,
+  # while in fact it does not.
+  ignore_errors: True
 
 - name: Push the template for apache config files
   template:
