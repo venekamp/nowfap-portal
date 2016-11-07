@@ -19,32 +19,13 @@
     owner: www-data
     mode: 0700
 
-- name: Copy SP meta data
+- name: Copy SP metadata, key and cert
   copy:
-    src: "{{ output_dir }}/{{entity_id }}.xml"
-    dest: "/etc/apache2/mellon/sp-metadata.xml"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     remote_src: True
     owner: www-data
-    mode: 0644
-  notify:
-    - Restart Apache
-
-- name: Copy key
-  copy:
-    src: "{{ output_dir }}/{{entity_id }}.key"
-    dest: "/etc/apache2/mellon/sp-private-key.pem"
-    remote_src: True
-    owner: www-data
-    mode: 0600
-  notify:
-    - Restart Apache
-
-- name: Copy cert
-  copy:
-    src: "{{ output_dir }}/{{entity_id }}.cert"
-    dest: "/etc/apache2/mellon/sp-cert.pem"
-    remote_src: True
-    owner: www-data
-    mode: 0600
+    mode: "{{ item.mode }}"
+  with_items: "{{ sp_files }}"
   notify:
     - Restart Apache
