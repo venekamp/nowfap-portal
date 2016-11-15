@@ -8,18 +8,20 @@
 
 - name: Obtain SURFconext certificate
   get_url:
-    url: https://engine.surfconext.nl/authentication/idp/certificate
+    url: https://engine.nowfap.demo.surfconext.nl/authentication/idp/certificate
     dest: /etc/apache2/mellon/surfconext/certificate.pem
     owner: www-data
     mode: 0600
+    validate_certs: no
   notify:
     - Restart Apache
 
 - name: Get the SURFConext metadata
   get_url:
-    url: https://engine.surfconext.nl/authentication/idp/metadata
+    url: https://engine.nowfap.demo.surfconext.nl/authentication/idp/metadata
     dest: /etc/apache2/mellon/surfconext/idp-metadata.xml
     owner: www-data
     mode: 0600
+    validate_certs: no
   notify:
     - Restart Apache

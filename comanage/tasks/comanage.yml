@@ -8,18 +8,24 @@
     file:
       path: "{{ item.path }}"
       state: "{{ item.state }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
       mode: "{{ item.mode }}"
     with_items:
-      - { path: "/home/ubuntu/comanage/src", state: directory, mode: "0755" }
-      - { path: "/var/www/html", state: directory, mode: "0755" }
+      - { path: "/home/ubuntu/comanage/src", state: directory, owner: "ubuntu", group: "ubuntu", mode: "0755" }
+      - { path: "/var/www/html", state: directory, owner: "root", group: "www-data", mode: "0775" }
 
   - name: Download comanage source
+    become_user: ubuntu
+    become: True
     get_url:
       url: "https://github.com/Internet2/comanage-registry/archive/{{ comanage_version }}.tar.gz"
       dest: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
     register: comanage_downloaded
 
   - name: Unarchive comanage source
+    become_user: www-data
+    become: True
     unarchive:
       src: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
       dest: "/var/www/html/"
