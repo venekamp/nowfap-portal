@@ -1,10 +1,8 @@
 ---
 sqlstart:
-  -
-   name: "mysql"
-   state: "started"
+  - name: "mysql"
+    state: "started"
 
 sqlrestart:
-  -
-   name: "mysql"
-   state: "restarted"
+  - name: "mysql"
+    state: "restarted"
