@@ -1,3 +1,13 @@
+#######################################################################
+{{ ansible_managed | comment('plain') }}
+#######################################################################
+
+
+<Location "/registry">
+    AuthType "Mellon"
+    MellonEnable "info"
+</Location>
+
 <Location "/registry/auth">
     # These are standard Apache apache configuration directives.
     # You must have enabled Apache's authn_core and authz_user modules.
@@ -76,7 +86,7 @@
     # value from that attribute may be used. Do not rely on it selecting a
     # specific value.
     # Default: MellonUser "NAME_ID"
-    MellonUser "NAME_ID"
+    MellonUser "urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
 
     # MellonIdP selects in which attribute we should dump the remote
     # IdP providerId. This is passed to other apache modules and to
@@ -89,14 +99,14 @@
     # yourself. The syntax is 'MellonSetEnv <local name> <IdP name>'.
     # You can list multiple MellonSetEnv directives.
     # Default. None set.
-    MellonSetEnv "e-mail" "mail"
+    #MellonSetEnv "e-mail" "mail"
 
     # MellonSetEnvNoPrefix is identical to MellonSetEnv, except this
     # does not prepend 'MELLON_' to the constructed environment variable.
     # The syntax is 'MellonSetEnvNoPrefix <local name> <IdP name>'.
     # You can list multiple MellonSetEnvNoPrefix directives.
     # Default. None set.
-    MellonSetEnvNoPrefix "DISPLAY_NAME" "displayName"
+    #MellonSetEnvNoPrefix "DISPLAY_NAME" "displayName"
 
     # MellonMergeEnvVars merges multiple values of environment variables
     # set using MellonSetEnv into single variable:
@@ -105,8 +115,8 @@
     # Second optional parameter specifies the separator, to override the
     # default semicolon.
     # Default: MellonMergeEnvVars Off
-    MellonMergeEnvVars On
-    MellonMergeEnvVars On ":"
+    #MellonMergeEnvVars On
+    #MellonMergeEnvVars On ":"
 
     # MellonEnvVarsIndexStart specifies if environment variables for
     # multi-valued attributes should start indexing from 0 or 1
@@ -122,7 +132,7 @@
     #     MELLON__groups_1=group2
     #     MELLON__groups_N=2
     # Default: MellonEnvVarsSetCount Off
-    MellonEnvVarsSetCount On
+    #MellonEnvVarsSetCount On
 
     # If MellonSessionDump is set, then the SAML session will be
     # available in the MELLON_SESSION environment variable
@@ -147,7 +157,7 @@
     # attribute, the last overrides the previous ones.
     #
     # Default: None set.
-    MellonRequire "eduPersonAffiliation" "student" "employee"
+    #MellonRequire "eduPersonAffiliation" "student" "employee"
 
     # MellonCond provides the same function as MellonRequire, with
     # extra functionality (MellonRequire is retained for backward
@@ -328,7 +338,7 @@
     #
     # Default: None set.
     #MellonDiscoveryURL "http://www.example.net/idp-discovery"
-    MellonDiscoveryURL "https://engine.surfconext.nl/authentication/idp/single-sign-on"
+    #MellonDiscoveryURL "https://engine.surfconext.nl/authentication/idp/single-sign-on"
 
     # MellonProbeDiscoveryTimeout sets the timeout of the
     # IdP probe discovery service, which is available on the
