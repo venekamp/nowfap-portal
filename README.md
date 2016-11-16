@@ -1,4 +1,4 @@
-NowFap -  NOn Web Federated Authentication Portal 
+NowFap -  NOn Web Federated Authentication Portal
 ======
 
 This project deploys COmanage using Ansible as a portal to handle
@@ -19,5 +19,5 @@ Machines are provisioned as follows:
 ansible-playbook -i inventories/inventory.comanage --become --become-user=root --become-method=sudo playbook.yml
 ```
 
-You will need to update the `inventory/inventory.comanage` config file
-with your own settings.
+If you want to create a different inventory, you can do store them into:
+`inventory/` and use your own settings.
