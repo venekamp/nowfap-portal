@@ -1,5 +1,6 @@
 ---
-- include_vars: "comanage/vars/packages.yml"
+- include_vars: "packages.yml"
+- include_vars: "repositories.yml"
 
 #Command for switch from apache2_handler to php-fpm
 #- name: Remove a repo

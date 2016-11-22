@@ -1,6 +1,6 @@
 ---
 # playbook to install and configure general components of a Comanage machine
-- include_vars: "comanage/vars/apache.yml"
+- include_vars: "apache.yml"
 
 #Uncomment for active php-fpm
 #- name: disable apache module
@@ -32,7 +32,7 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-  with_items: "{{ apache_config_files }}"
+  with_items: "{{ apache_templates }}"
   become: yes
 
 - name: Eneable COmanage site

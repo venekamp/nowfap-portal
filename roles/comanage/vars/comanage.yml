@@ -1,4 +1,6 @@
 ---
+comanage_version: 1.0.5
+
 registry_path: "/var/www/html/registry"
 
 www_user: "www-data"
@@ -31,3 +33,6 @@ infodb:
   -
    regexp: "you@localhost"
    replace: "admin@example.it"
+
+comanage_templates:
+  - { src: apache2-comanage.conf.j2, dest: /etc/apache2/conf-available/apache2-comanage.conf }

@@ -1,0 +1,16 @@
+---
+# playbook to install and configure general components of a VOPaaS machine
+#
+
+- hosts: comanage
+  become_user: root
+  become: True
+
+  roles:
+    - common
+    - auth_mellon
+    - php
+    - mysql
+    - comanage
+    - surfconext
+    - apache

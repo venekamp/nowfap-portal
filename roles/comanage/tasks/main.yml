@@ -2,7 +2,7 @@
 ### Modified by Benjamin Oshrin comanage yaml
   # Download COmanage source using tarball of specified release
   # (No need to clone git repo with extra files)
-  - include_vars: comanage/vars/comanage.yml
+  - include_vars: comanage.yml
 
   - name: Create target directories
     file:
@@ -123,3 +123,11 @@
       hour: "3"
       user: "{{ www_user }}"
       job: "cd /path/to/registry-source/app && Console/cake job -q"
+
+  - name: Copy comange files
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+    with_items: "{{ comanage_templates }}"
+    notify:
+      - Restart Apache

@@ -1,5 +1,5 @@
 ---
-- include_vars: "comanage/vars/auth_mellon.yml"
+- include_vars: "auth_mellon.yml"
 
 - name: Create metadata
   script: scripts/mellon_create_metadata.sh -d {{ output_dir }} -n  {{ entity_id }} {{ endpoint_url }}
@@ -18,6 +18,14 @@
     state: directory
     owner: www-data
     mode: 0700
+
+- name: Copy auth_mellon files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ auth_mellon_templates }}"
+  notify:
+    - Restart Apache
 
 - name: Copy SP metadata, key and cert
   copy:
