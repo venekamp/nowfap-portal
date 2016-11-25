@@ -1,0 +1,3 @@
+---
+basedn: dc=portal,dc=example,dc=org
+ldap_admin: admin

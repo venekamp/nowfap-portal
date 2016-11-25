@@ -1,0 +1,8 @@
+---
+ldap_admin: admin
+ldap_admin_passwd: 12345678
+basedn: "dc=portal,dc=example,dc=org"
+rootdn: "cn={{ ldap_admin }},{{ basedn }}"
+organisation: Example
+hostname: portal
+domainname: example.org

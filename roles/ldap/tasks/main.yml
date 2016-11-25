@@ -1,0 +1,50 @@
+---
+#- include_vars: "ldap.yml"
+#  tags:
+#    - always
+
+- name: Generating password hash for LDAP admin
+  command:
+    slappasswd -h {SSHA} -s {{ ldap_admin_passwd }}
+  register:
+    ldap_root_hash
+  tags: ldap
+
+- name: Create directory for ldif files
+  file:
+    path: ldifs
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+  tags: ldap
+
+- name: Generate ldif from template
+  become_user: "{{ ansible_user }}"
+  become: True
+  template:
+    src: "{{ item }}"
+    dest: ldifs/{{ item | basename | regex_replace('.j2', '') }}
+    mode: 0644
+  with_fileglob:
+    - ../templates/*.ldif.j2
+  tags: ldap
+
+- name: Starting slapd service
+  service:
+    name: slapd
+    state: started
+  tags: ldap
+
+- name: Ensure the ldap admin credentials are set
+  command: ldapmodify -Y EXTERNAL -H ldapi:/// -f ldifs/set_root_credentials.ldif
+  tags: ldap
+
+- name: Executing ldifs
+  become_user: "{{ ansible_user }}"
+  become: True
+  command:
+    ldapadd -c -x -D cn={{ ldap_admin }},{{ basedn }} -w {{ ldap_admin_passwd }} -f ldifs/initial_setup.ldif
+  register: result
+  failed_when: "(result.rc not in [0, 68])"
+  tags: ldap

@@ -1,0 +1,11 @@
+---
+- include_vars: "phpldapadmin.yml"
+
+- name: Setting phpldapadmin configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: www-data
+    mode: 0640
+  with_items: "{{ phpldapadmin_templates }}"
