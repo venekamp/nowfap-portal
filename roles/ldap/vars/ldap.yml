@@ -1,1 +1,4 @@
 ---
+eduPersonSchema_ldif: openLdapEduperson-201602DV.ldif
+eduPersonSchema_zip: 2xOpenLdapEduPerson-201602.zip
+eduPersonSchema_url: https://spaces.internet2.edu/download/attachments/2309/{{ eduPersonSchema_zip }}
