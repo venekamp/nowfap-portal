@@ -10,8 +10,8 @@ entity_id: "{{ endpoint_url }}/metadata"
 
 sp_files:
   - { src: "{{ output_dir }}/{{ sp_hostname }}.xml",  dest: "/etc/apache2/mellon/sp-metadata.xml",    mode: "0644" }
-  - { src: "{{ output_dir }}/{{ sp_hostname }}.key",  dest: "/etc/apache2/mellon/sp-private-key.key", mode: "0600" }
-  - { src: "{{ output_dir }}/{{ sp_hostname }}.cert", dest: "/etc/apache2/mellon/sp-cert.cert",       mode: "0600" }
+  - { src: "{{ output_dir }}/{{ sp_hostname }}.key",  dest: "/etc/apache2/mellon/sp-private-key.pem", mode: "0600" }
+  - { src: "{{ output_dir }}/{{ sp_hostname }}.cert", dest: "/etc/apache2/mellon/sp-cert.pem",        mode: "0600" }
 
 auth_mellon_templates:
   - { src: auth-mellon.conf.j2,      dest: /etc/apache2/conf-available/auth-mellon.conf }
