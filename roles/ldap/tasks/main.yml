@@ -22,7 +22,6 @@
     url: "{{ eduPersonSchema_url }}"
     dest: downloads/
   tags: ldap
-  register: eduPersonDownloaded
 
 # Of course the unarchive module should be used here, but the things is,
 # it seems broken in 2.2.0, although it should be fixed in 2.1.1. I guess
@@ -31,10 +30,7 @@
   become_user: "{{ ansible_user }}"
   become: True
   command: unzip -o downloads/{{ eduPersonSchema_zip }} -d /tmp
-  when:
-    eduPersonDownloaded|changed
   tags: ldap
-  register: eduPersonUnpacked
 
 # OpenLDAP does not like adding exisiting entries again. Only add the
 # schema if it has not been added already. This does not yet take care
@@ -42,21 +38,25 @@
 - name: Copy the unpacked ldifs
   copy:
     src: /tmp/{{ eduPersonSchema_ldif }}
-    dest: /home/{{ ansible_user }}/ldap_schemas/{{ eduPersonSchema_lidf }}
+    dest: /home/{{ ansible_user }}/ldap_schemas/{{ eduPersonSchema_ldif }}
     remote_src: True
-  when:
-    eduPersonUnpacked|changed
+  tags:
+    ldap
+
+- name: Check if eduPerson schema is already present
+  shell: ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b 'cn=schema,cn=config' '(cn=*)' dn | grep 'cn={[0123456789]\+}eduperson,cn=schema,cn=config'
+  failed_when: not [0, 1]
   tags:
     ldap
   register:
-    eduPersonSchema
+    eduPersonSchemaPresent
 
 # Based on the success or failure of copying the eduPerson schema add
 # the schema to the ldap database. Copying the same file in the previous
-# taske, would lead to not registering the edoPersonSchema variable.
+# task, would lead to not registering the edoPersonSchema variable.
 - name: Ensure the eduPerson schema is added to LDAP
-  command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f ldap_schemas/{{ eduPersonSchema_lidf }}
-  when: eduPersonSchema|changed
+  command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f ldap_schemas/{{ eduPersonSchema_ldif }}
+  when: eduPersonSchemaPresent.stdout == ""
   tags:
     ldap
 
@@ -95,7 +95,7 @@
   register: emptyDIT
   failed_when: "emptyDIT.rc not in [0, 32]"
 
-- name: Executing ldifs
+- name: Initialize DIT
   become_user: "{{ ansible_user }}"
   become: True
   command:
