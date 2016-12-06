@@ -21,3 +21,18 @@ ansible-playbook -i inventories/inventory.comanage comanage.yml
 
 If you want to create a different inventory, you can do store them into:
 `inventory/` and use your own settings.
+
+### Roles
+The playbook executes the following roles:
+
+| Role       | Description |
+| ---------- | ----------- |
+common       | A number of command task, like package installation. |
+auth_mellon  | Install and configure an Apache module for external SAML Authentcation. |
+php          | Php 5.6 is necessary for the underlying framework. |
+mysql        | The framework requires a database. |
+comanage     | COmanage provides a portal in which the use case are implemented. |
+surfconext   | Necessary metadata is fetched and verified in order to make the SAML flow work. |
+apache       | The portal is build with Apache. |
+ldap         | LDAP is used to store attributes (ASP, OTP, SSH Pub key, etc) collected by COmanage. |
+phpldapadmin | Web interface to an LDAP instance. |
