@@ -1,0 +1,3 @@
+---
+certificate:     /etc/ssl/cert/portal.example.org.pem
+certificate_key: /etc/ssl/private/portal.example.org.key
