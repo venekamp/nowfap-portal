@@ -43,12 +43,14 @@ expected that certificates are already installed on the target machine.
 To support this, two variables are defined:
 - certificate
 - certificate_key
+
 The first one, `certificate` points to the installed certificate, while
 `certificate_key` points to the corresponding key. Use your host file to
 change the values, otherwise you will fallback to default values.
 
 Both the `certificate` and `certificate_key` variables come with default
 values.
+
 | Variable | Defaul value |
 | -------- | ------------ |
 | certificate     | /etc/ssl/cert/portal.example.org.pem    |
