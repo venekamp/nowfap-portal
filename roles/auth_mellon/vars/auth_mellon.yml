@@ -1,6 +1,6 @@
 ---
 sp_protocol: "https://"
-sp_hostname: "nowfap-test.pt-38.utr.surfcloud.nl"
+#sp_hostname: "nowfap-test.pt-38.utr.surfcloud.nl"
 sp_path: "/registry/auth/sp"
 
 
