@@ -11,13 +11,19 @@ objectClass: organizationalRole
 
 # Create the organisational unit (ou) group, which will contain all groups
 dn: ou=group,{{ basedn }}
-ou: Groups
+ou: groups
 objectClass: top
 objectClass: organizationalUnit
 
 # Add a group to the group container
-dn: cn=irodsuser,ou=Group,{{ basedn }}
-cn: irodsuser
-gidNumber: 2500
+#dn: cn=irodsuser,ou=group,{{ basedn }}
+#cn: irodsuser
+#gidNumber: 2500
+#objectClass: top
+#objectClass: posixGroup
+
+# Create the organisational unit (ou) people
+dn: ou=people,{{ basedn }}
+ou: people
 objectClass: top
-objectClass: posixGroup
+objectClass: organizationalUnit
