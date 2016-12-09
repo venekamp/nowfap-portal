@@ -2,7 +2,9 @@
 # playbook to install and configure general components of a VOPaaS machine
 #
 
-- hosts: comanage
+- hosts:
+    - comanage-test
+    - bbmri-nl
   become_user: root
   become: True
 
