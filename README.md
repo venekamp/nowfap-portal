@@ -23,7 +23,7 @@ If you want to create a different inventory, you can do store them into:
 `inventory/` and use your own settings.
 
 Do not forget to initialize `sp_protocol`, `sp_hostname` and`sp_path` in
-your host file. See [caveats]['Do not forget to specify parameters for mod_mellon']
+your host file. See [caveats](https://github.com/venekamp/nowfap-portal#do-not-forget-to-specify-parameters-for-mod_mellon)
 
 
 # Roles
@@ -65,6 +65,7 @@ In order for mod_mellon to do the right thing, it needs to know a few
 things first. You need to do this for each host, as these values are
 unique to each one. Well, at least the sp_hostname is. So, please define
 the following in your host file:
+
 | Variable | Description | Default value |
 | -------- | ----------- | ------------- |
 | sp_protocol | Protocol to be used | https:// |
