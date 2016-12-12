@@ -1,9 +1,4 @@
 ---
-sp_protocol: "https://"
-#sp_hostname: "nowfap-test.pt-38.utr.surfcloud.nl"
-sp_path: "/registry/auth/sp"
-
-
 output_dir: "/home/ubuntu/auth_mellon"
 endpoint_url: "{{sp_protocol }}{{ sp_hostname }}{{ sp_path }}"
 entity_id: "{{ endpoint_url }}/metadata"
