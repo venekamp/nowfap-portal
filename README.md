@@ -23,7 +23,7 @@ If you want to create a different inventory, you can do store them into:
 `inventory/` and use your own settings.
 
 Do not forget to initialize `sp_protocol`, `sp_hostname` and`sp_path` in
-your host file. See [caveats](https://github.com/venekamp/nowfap-portal#do-not-forget-to-specify-parameters-for-mod_mellon)
+your host file. See [caveats](#do-not-forget-to-specify-parameters-for-mod_mellon)
 
 
 # Roles
