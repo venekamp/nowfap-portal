@@ -23,6 +23,14 @@
     dest: downloads/
   tags: ldap
 
+- name: Fetch LdapPublicKey schema
+  become_user: "{{ ansible_user }}"
+  become: true;
+  get_url:
+    url: "{{ ldapPublicKeySchema_url }}"
+    dest: downloads/
+  tags: ldapPublicKeySchema
+
 # Of course the unarchive module should be used here, but the things is,
 # it seems broken in 2.2.0, although it should be fixed in 2.1.1. I guess
 # porting the fix to 2.2.0 has been forgotten...
