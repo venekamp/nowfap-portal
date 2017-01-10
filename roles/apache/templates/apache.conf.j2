@@ -2,9 +2,14 @@
 {{ ansible_managed | comment('plain') }}
 #######################################################################
 
+<VirtualHost *:80>
+    ServerName {{ sp_hostname }}
+    Redirect  "/" "https://{{ sp_hostname }}/"
+</VirtualHost>
 
 <IfModule mod_ssl.c>
-    <VirtualHost _default_:443>
+    <VirtualHost *:443>
+        ServerName {{ sp_hostname }}
         ServerAdmin webmaster@localhost
 
         DocumentRoot /var/www/html

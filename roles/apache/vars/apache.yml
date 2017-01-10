@@ -28,6 +28,8 @@ restart:
 apache_enable_conf:
   - apache2-comanage
   - auth-mellon
+  - servername
 
 apache_templates:
-  - { src: apache.conf.j2,           dest: /etc/apache2/sites-available/default.conf         }
+  - { src: apache.conf.j2, dest: /etc/apache2/sites-available/default.conf }
+  - { src: servername.j2,  dest: /etc/apache2/conf-available/servername.conf }
