@@ -3,6 +3,7 @@
   tags: always
 
 - name: Ensure the a number of directories exist
+  become_user: "{{ ansible_user }}"
   file:
     path: "{{ item }}"
     state: directory
@@ -11,9 +12,19 @@
     mode: 0755
   tags: ldap
   with_items:
-    - ldap_schemas
+    - bin
+    - "{{ ldap_schema_dir }}"
     - ldifs
     - downloads
+
+- name: Copy schema2ldif
+  become_user: "{{ ansible_user }}"
+  copy:
+    src: roles/ldap/files/schema2ldif
+    dest: bin/
+    mode: 0755
+  tags:
+    ldap
 
 - name: Fetch the eduPerson schema
   become_user: "{{ ansible_user }}"
@@ -28,8 +39,14 @@
   become: true;
   get_url:
     url: "{{ ldapPublicKeySchema_url }}"
-    dest: downloads/
-  tags: ldapPublicKeySchema
+    dest: "{{ ldap_schema_dir }}"
+  tags: ldap
+
+- name: Convert schema to ldif format
+  become_user: "{{ ansible_user }}"
+  command: ~/bin/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema
+  tags:
+    ldap
 
 # Of course the unarchive module should be used here, but the things is,
 # it seems broken in 2.2.0, although it should be fixed in 2.1.1. I guess
@@ -46,7 +63,7 @@
 - name: Copy the unpacked ldifs
   copy:
     src: /tmp/{{ eduPersonSchema_ldif }}
-    dest: /home/{{ ansible_user }}/ldap_schemas/{{ eduPersonSchema_ldif }}
+    dest: /home/{{ ansible_user }}/{{ ldap_schema_dir }}/{{ eduPersonSchema_ldif }}
     remote_src: True
   tags:
     ldap
@@ -63,8 +80,22 @@
 # the schema to the ldap database. Copying the same file in the previous
 # task, would lead to not registering the edoPersonSchema variable.
 - name: Ensure the eduPerson schema is added to LDAP
-  command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f ldap_schemas/{{ eduPersonSchema_ldif }}
+  command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f {{ ldap_schema_dir }}/{{ eduPersonSchema_ldif }}
   when: eduPersonSchemaPresent.stdout == ""
+  tags:
+    ldap
+
+- name: Check if the ldapPublicKey schema is already present
+  shell: ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b 'cn=schema,cn=config' '(cn=*)' dn | grep 'cn={[0-9]\+}openssh-lpk-openldap,cn=schema,cn=config'
+  failed_when: not [0, 1]
+  tags:
+    ldap
+  register:
+    ldapPublicKey
+
+- name: Ensure the ldapPublicKey schema is added to LDAP
+  command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f "{{ ldap_schema_dir }}/{{ ldapPublicKey_ldif }}"
+  when: ldapPublicKey.stdout == ""
   tags:
     ldap
 
