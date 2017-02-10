@@ -1,0 +1,3 @@
+---
+AuthorizedKeysCommand_file: /root/get-authorized-keys.sh
+AuthorizedKeysCommand_user: root

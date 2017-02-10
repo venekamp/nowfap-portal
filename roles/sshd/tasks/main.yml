@@ -1,0 +1,33 @@
+---
+
+- include_vars: sshd.yml
+
+- name: Perform apt-get update
+  apt:
+    update_cache: yes
+    cache_valid_time: 360
+  become: Yes
+
+- name: Ensure sshd is installed
+  apt:
+    name: openssh-server
+    state: present
+  become: yes
+
+- name: Copy authorized key script
+  copy:
+    src: roles/sshd/files/get-authorized-keys.sh
+    dest: /usr/local/bin/ 
+    owner: nobody
+    group: nogroup
+    mode: 0700
+
+- name: Copy sshd related files
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart sshd

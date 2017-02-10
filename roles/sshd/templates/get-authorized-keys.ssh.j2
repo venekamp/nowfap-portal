@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+
+USERNAME=$1
+
+LOG_FILE={{ log_file }}
+
+log() {
+        echo "$(date '+%b %d %H:%M:%S') $1" >> $LOG_FILE
+}
+
+LDAP_SERVER={{ ldap_server }}
+LDAP_ADMIN={{ ldap_admin }}
+PEOPLE_DN={{ ldap_people_dn }}
+
+log $USERNAME
+log $LDAP_SERVER
+log $LDAP_ADMIN
+log $PEOPLE_DN
+
+ldapsearch -o ldif-wrap=no -LLL -H $LDAP_SERVER -w '{{ ldap_admin_passwd }}' -D $LDAP_ADMIN -b $PEOPLE_DN "(uid=$USERNAME)" sshPublicKey | grep sshPublicKey | awk '{ print $2, $3, $4 }'
