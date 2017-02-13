@@ -22,6 +22,7 @@
       url: "https://github.com/Internet2/comanage-registry/archive/{{ comanage_version }}.tar.gz"
       dest: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
     register: comanage_downloaded
+    when: (comanage_version != "develop")
 
   - name: Unarchive comanage source
     become_user: www-data
