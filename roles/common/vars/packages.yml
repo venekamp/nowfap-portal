@@ -16,7 +16,6 @@ packages:
   - libapache2-mod-auth-mellon
   - python-letsencrypt-apache
   - postfix
-  - slapd
   - ldap-utils
   - phpldapadmin
   - php5.6-ldap
