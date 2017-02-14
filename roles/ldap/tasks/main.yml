@@ -2,6 +2,19 @@
 - include_vars: "ldap.yml"
   tags: always
 
+- name: perform apt-get update
+  apt:
+    update_cache: yes
+    cache_valid_time: 360
+  become: Yes
+
+- name: Ensure that packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages  }}"
+  become: Yes
+
 - name: Ensure the a number of directories exist
   become_user: "{{ ansible_user }}"
   file:

@@ -1,4 +1,9 @@
 ---
+packages:
+  - slapd
+  - ldap-utils
+  - unzip
+
 ldap_schema_dir: ldap_schemas
 
 eduPersonSchema_ldif: openLdapEduperson-201602DV.ldif
