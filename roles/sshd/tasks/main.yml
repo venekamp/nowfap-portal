@@ -10,8 +10,11 @@
 
 - name: Ensure sshd is installed
   apt:
-    name: openssh-server
+    name: "{{ item }}"
     state: present
+  with_items:
+    - openssh-server
+    - ldap-utils
   become: yes
 
 - name: Copy authorized key script
