@@ -11,10 +11,10 @@
     - { role: common,       tags: common       }
     - { role: auth_mellon,  tags: auth_mellon  }
     - { role: php,          tags: php          }
-    - { role: apache,       tags: apache       }
     - { role: surfconext,   tags: surfconext   }
     - { role: mysql,        tags: mysql        }
     - { role: comanage,     tags: comanage     }
+    - { role: apache,       tags: apache       }
 
 - hosts:
   - ldap-server
