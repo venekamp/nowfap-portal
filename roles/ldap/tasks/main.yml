@@ -36,8 +36,6 @@
     src: roles/ldap/files/schema2ldif
     dest: bin/
     mode: 0755
-  tags:
-    ldap
 
 - name: Fetch the eduPerson schema
   become_user: "{{ ansible_user }}"
@@ -45,7 +43,6 @@
   get_url:
     url: "{{ eduPersonSchema_url }}"
     dest: downloads/
-  tags: ldap
 
 - name: Fetch LdapPublicKey schema
   become_user: "{{ ansible_user }}"
@@ -53,13 +50,10 @@
   get_url:
     url: "{{ ldapPublicKeySchema_url }}"
     dest: "{{ ldap_schema_dir }}"
-  tags: ldap
 
 - name: Convert schema to ldif format
   become_user: "{{ ansible_user }}"
   command: ~/bin/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema
-  tags:
-    ldap
 
 # Of course the unarchive module should be used here, but the things is,
 # it seems broken in 2.2.0, although it should be fixed in 2.1.1. I guess
@@ -68,7 +62,6 @@
   become_user: "{{ ansible_user }}"
   become: True
   command: unzip -o downloads/{{ eduPersonSchema_zip }} -d /tmp
-  tags: ldap
 
 # OpenLDAP does not like adding exisiting entries again. Only add the
 # schema if it has not been added already. This does not yet take care
@@ -78,14 +71,10 @@
     src: /tmp/{{ eduPersonSchema_ldif }}
     dest: /home/{{ ansible_user }}/{{ ldap_schema_dir }}/{{ eduPersonSchema_ldif }}
     remote_src: True
-  tags:
-    ldap
 
 - name: Check if eduPerson schema is already present
   shell: ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b 'cn=schema,cn=config' '(cn=*)' dn | grep 'cn={[0123456789]\+}eduperson,cn=schema,cn=config'
   failed_when: not [0, 1]
-  tags:
-    ldap
   register:
     eduPersonSchemaPresent
 
@@ -95,29 +84,22 @@
 - name: Ensure the eduPerson schema is added to LDAP
   command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f {{ ldap_schema_dir }}/{{ eduPersonSchema_ldif }}
   when: eduPersonSchemaPresent.stdout == ""
-  tags:
-    ldap
 
 - name: Check if the ldapPublicKey schema is already present
   shell: ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b 'cn=schema,cn=config' '(cn=*)' dn | grep 'cn={[0-9]\+}openssh-lpk-openldap,cn=schema,cn=config'
   failed_when: not [0, 1]
-  tags:
-    ldap
   register:
     ldapPublicKey
 
 - name: Ensure the ldapPublicKey schema is added to LDAP
   command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f "{{ ldap_schema_dir }}/{{ ldapPublicKey_ldif }}"
   when: ldapPublicKey.stdout == ""
-  tags:
-    ldap
 
 - name: Generating password hash for LDAP admin
   command:
     slappasswd -h {SSHA} -s {{ ldap_admin_passwd }}
   register:
     ldap_root_hash
-  tags: ldap
 
 - name: Generate ldif from template
   become_user: "{{ ansible_user }}"
@@ -128,22 +110,18 @@
     mode: 0644
   with_fileglob:
     - ../templates/*.ldif.j2
-  tags: ldap
 
 - name: Starting slapd service
   service:
     name: slapd
     state: started
-  tags: ldap
 
 - name: Ensure the ldap admin credentials are set
   command: ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f ldifs/set_root_credentials.ldif
-  tags: ldap
 
 - name: Check if DIT has been created before
   command:
-    ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b "{{ basedn }}" "(ou=group)" dn
-  tags: ldap
+    ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b "{{ ldap_basedn }}" "(ou=group)" dn
   register: emptyDIT
   failed_when: "emptyDIT.rc not in [0, 32]"
 
@@ -151,7 +129,7 @@
   become_user: "{{ ansible_user }}"
   become: True
   command:
-    ldapadd -c -x -D cn={{ ldap_admin }},{{ basedn }} -w {{ ldap_admin_passwd }} -f ldifs/initial_setup.ldif
+    ldapadd -c -x -D cn={{ ldap_admin }},{{ ldap_basedn }} -w {{ ldap_admin_passwd }} -f ldifs/initial_setup.ldif
   register: result
   failed_when: "(result.rc not in [0, 68])"
   tags: ldap

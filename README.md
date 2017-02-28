@@ -27,6 +27,7 @@ able to create your own.
 The below inventory specifies the different hosts that need to be
 provisioned in order to get a working system. There are four major
 parts:
+
 1. the portal itself;
 2. an LDAP server;
 3. SSH daemon capable of accessing the LDAP server for SSH key
@@ -80,8 +81,12 @@ Inside the `group_vars` directory a number of group files can be found:
    ```
    ---
 
+   ldap_admin: admin
    ldap_admin_passwd: BigSecret
    ldap_basedn: dc=portal,dc=example,dc=org
+   ldap_root: "cn={{ ldap_admin }},{{ ldap_basedn }}"
+
+   organisation: Example
    ```
 4. **ssh-access.yml**
    ```
