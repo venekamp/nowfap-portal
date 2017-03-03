@@ -30,8 +30,8 @@ StrictModes yes
 
 RSAAuthentication yes
 PubkeyAuthentication yes
-#AuthorizedKeysFile	%h/.ssh/authorized_keys
-AuthorizedKeysFile /dev/null
+AuthorizedKeysFile	%h/.ssh/authorized_keys
+#AuthorizedKeysFile /dev/null
 
 AuthorizedKeysCommand = {{ AuthorizedKeysCommand_file }}
 AuthorizedKeysCommandUser = {{ AuthorizedKeysCommand_user }}
