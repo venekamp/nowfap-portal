@@ -21,7 +21,13 @@ ansible-playbook -i <local_inventory> comanage.yml
 
 You are expected to provide your own inventory file as stated in the
 above line. We will provide an example inventory file, so that you are
-able to create your own.
+able to create your own. In the repository you'll find and example
+inventory. See the `inventory` directory. The with this example
+inventory, the above command will become:
+
+```
+ansible-playbook -i inventory/example/hosts comanage.yml
+```
 
 ## Example inventory
 The below inventory specifies the different hosts that need to be
@@ -84,7 +90,7 @@ Inside the `group_vars` directory a number of group files can be found:
    ldap_admin: admin
    ldap_admin_passwd: BigSecret
    ldap_basedn: dc=portal,dc=example,dc=org
-   ldap_root: "cn={{ ldap_admin }},{{ ldap_basedn }}"
+   ldap_rootdn: "cn={{ ldap_admin }},{{ ldap_basedn }}"
 
    organisation: Example
    ```

@@ -1,0 +1,15 @@
+[portal]
+portal.example.org    ansible_user=ansible
+
+[ldap:children]
+ldap-server
+ssh-access
+
+[ldap-server]
+ldap.example.org    ansible_user=ansible
+
+[ssh-access]
+ssh.example.org     ansible_user=ansible
+
+[phpldapadmin]
+portal.example.org    ansible_user=ansible

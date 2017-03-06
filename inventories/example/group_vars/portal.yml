@@ -1,0 +1,8 @@
+---
+
+certificate: /etc/ssl/certs/portal.example.org.pem
+certificate_key: /etc/ssl/private/portal.example.org.key
+
+sp_protocol: https://
+sp_hostname: portal.example.org
+sp_path: registry/auth/sp
