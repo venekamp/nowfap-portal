@@ -44,22 +44,22 @@ parts:
 A typical host file would look like:
 ```
 [portal]
-172.16.10.1  ansible_user=ubuntu
+portal.example.org  ansible_user=ansible
 
 [ldap:children]
 ldap-server
 ssh-access
 
 [ldap-server]
-172.16.10.1 ansible_user=ubuntu
+ldap.example.org ansible_user=ansible
 
 [ssh-access]
-192.168.15.1 ansible_user=gerben
+ssh.example.org ansible_user=ansible
 
 [phpldapadmin]
-172.16.10.1  ansible_user=ubuntu
+portal.example.org  ansible_user=ansible
 ```
-The `ldap-server` and `'ssh-access` hosts are placed in the same group,
+The `ldap-server` and `ssh-access` hosts are placed in the same group,
 as they share the IP address of the LDAP server.
 
 Together with the above hosts file, `group_vars` are created as well.
@@ -81,7 +81,7 @@ Inside the `group_vars` directory a number of group files can be found:
    ```
    ---
 
-   ldap_server: ldap://172.16.10.1
+   ldap_server: ldap://ldap.example.org
    ```
 3. **ldap-server.yml**
    ```
@@ -89,7 +89,7 @@ Inside the `group_vars` directory a number of group files can be found:
 
    ldap_admin: admin
    ldap_admin_passwd: BigSecret
-   ldap_basedn: dc=portal,dc=example,dc=org
+   ldap_basedn: dc=ldap,dc=example,dc=org
    ldap_rootdn: "cn={{ ldap_admin }},{{ ldap_basedn }}"
 
    organisation: Example
@@ -99,7 +99,7 @@ Inside the `group_vars` directory a number of group files can be found:
    ---
 
    ldap_admin_passwd: BigSecret
-   ldap_basedn: dc=portal,dc=example,dc=org
+   ldap_basedn: dc=ldap,dc=example,dc=org
    ```
 
 Please note that in the above hosts and group_vars files examples,
