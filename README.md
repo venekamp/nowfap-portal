@@ -84,7 +84,7 @@ Inside the `group_vars` directory a number of group files can be found:
    ldap_admin: admin
    ldap_admin_passwd: BigSecret
    ldap_basedn: dc=portal,dc=example,dc=org
-   ldap_root: "cn={{ ldap_admin }},{{ ldap_basedn }}"
+   ldap_rootdn: "cn={{ ldap_admin }},{{ ldap_basedn }}"
 
    organisation: Example
    ```
