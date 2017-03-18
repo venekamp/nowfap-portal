@@ -1,5 +1,5 @@
 ---
-comanage_version: 1.0.6
+#comanage_version: 1.0.6
 #comanage_version: develop
 
 registry_path: "/var/www/html/registry"
