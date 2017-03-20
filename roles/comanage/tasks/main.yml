@@ -41,8 +41,8 @@
 
   - name: Adding non-core plugins
     file:
-      src: /var/www/html/comange-registry-{{ comanage_version }}/app/AvailablePlugin/{{ item }}
-      dest: /var/www/html/comange-registry-{{ comanage_version }}/local/Plugin/{{ item }}
+      src: /var/www/html/registry/app/AvailablePlugin/{{ item }}
+      dest: /var/www/html/registry/local/Plugin/{{ item }}
       owner: www-data
       group: www-data
       mode: 0644
