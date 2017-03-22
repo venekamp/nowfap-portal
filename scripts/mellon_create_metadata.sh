@@ -156,10 +156,12 @@ fi
 
 CERT="$(grep -v '^-----' "$OUTFILE.cert")"
 
+UUID=$(uuidgen)
+
 cat >"$OUTFILE.xml" <<EOF
 <?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-                     entityID="https://192.168.50.4/registry/auth/sp/metadata">
+                     entityID="https://192.168.50.4/registry/auth/sp/metadata/$UUID">
   <md:SPSSODescriptor AuthnRequestsSigned="true"
                       WantAssertionsSigned="true"
                       protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
