@@ -2,7 +2,7 @@
 - include_vars: "auth_mellon.yml"
 
 - name: Create metadata
-  script: scripts/mellon_create_metadata.sh -d {{ output_dir }} -n  {{ entity_id }} {{ endpoint_url }}
+  script: scripts/mellon_create_metadata.sh -d {{ output_dir }} -n  {{ entity_id }} {{ endpoint_url }} {{ given_name }} {{ surname }} {{ email_contact }} {{ organisation }} {{ sp_protocol }}{{ sp_hostname }}
   become: false
 
 - name: Create a directory where auth_mellon can store data

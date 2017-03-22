@@ -11,7 +11,7 @@ set -e
 PROG="$(basename "$0")"
 
 printUsage() {
-    echo "Usage: $PROG [-d output directory] [-n do not generate new key] ENTITY-ID ENDPOINT-URL"
+    echo "Usage: $PROG [-d output directory] [-n do not generate new key] ENTITY-ID ENDPOINT-URL GIVEN_NAME SURNAME EMAIL_CONTACT ORGANISATION ORGANISATION_URL"
     echo ""
     echo "Example:"
     echo "  $PROG urn:someservice https://sp.example.org/mellon"
@@ -69,6 +69,36 @@ if [ -z "$BASEURL" ]; then
     exit 1
 fi
 
+GIVEN_NAME=$3
+if [ -z "$GIVEN_NAME" ]; then
+    echo "$PROG: The given name must be speciied." >&2
+    exit 1
+fi
+
+SURNAME=$4
+if [ -z "$SURNAME" ]; then
+    echo "$PROG: The surname must be specified." >&2
+    exit 1
+fi
+
+EMAIL_CONTACT=$5
+if [ -z "$EMAIL_CONTACT" ]; then
+    echo "$PROG: The email contact must be specified." >&2
+    exit 1
+fi
+
+ORGANISATION=$6
+if [ -z "$ORGANISATION" ]; then
+    echo "$PROG: The organisation is required." >&2
+    exit 1
+fi
+
+ORGANISATION_URL=$7
+if [ -z "$ORGANISATION_URL" ]; then
+    echo "$PROG: The organisation URL is required." >&2
+    exit 1
+fi
+
 if ! echo "$BASEURL" | grep -q '^https\?://'; then
     echo "$PROG: The URL must start with \"http://\" or \"https://\"." >&2
     exit 1
@@ -93,6 +123,10 @@ echo
 echo "Endpoints:"
 echo "SingleLogoutService:       $BASEURL/logout"
 echo "AssertionConsumerService:  $BASEURL/postResponse"
+echo "Give name:                 $GIVEN_NAME"
+echo "Surname:                   $SURNAME"
+echo "Organisation:              $ORGANISATION"
+echo "Organisation URL:          $ORGANISATION_URL"
 echo
 
 # No files should not be readable by the rest of the world.
@@ -135,6 +169,16 @@ cat >"$OUTFILE.xml" <<EOF
     <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="$BASEURL/logout"/>
     <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="$BASEURL/postResponse" index="0"/>
   </SPSSODescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="en">$ORGANISATION</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en">$ORGANISATION</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en">$ORGANISATION_URL</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="technical">
+    <md:GivenName>$GIVEN_NAME</md:GivenName>
+    <md:SurName>$SURNAME</md:SurName>
+    <md:EmailAddress>$EMAIL_CONTACT</md:EmailAddress>
+  </md:ContactPerson>
 </EntityDescriptor>
 EOF
 
