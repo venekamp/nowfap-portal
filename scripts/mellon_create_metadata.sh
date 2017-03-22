@@ -161,10 +161,19 @@ UUID=$(uuidgen)
 cat >"$OUTFILE.xml" <<EOF
 <?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+                     xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
                      entityID="https://192.168.50.4/registry/auth/sp/metadata/$UUID">
   <md:SPSSODescriptor AuthnRequestsSigned="true"
                       WantAssertionsSigned="true"
                       protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:Extensions>
+      <mdui:UIInfo>
+        <mdui:DisplayName xml:lang="en">COmanage DEMO - $GIVEN_NAME $SURNAME</mdui:DisplayName>
+        <mdui:Description xml:lang="en">
+          This is a demo instance for the COmanage hackathon.
+        </mdui:Description>
+      </mdui:UIInfo>
+    </md:Extensions>
     <md:KeyDescriptor use="signing">
       <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
         <ds:X509Data>
