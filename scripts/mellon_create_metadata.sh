@@ -157,29 +157,40 @@ fi
 CERT="$(grep -v '^-----' "$OUTFILE.cert")"
 
 cat >"$OUTFILE.xml" <<EOF
-<EntityDescriptor entityID="$ENTITYID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-  <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <KeyDescriptor use="signing">
+<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+                     entityID="https://192.168.50.4/registry/auth/sp/metadata">
+  <md:SPSSODescriptor AuthnRequestsSigned="true"
+                      WantAssertionsSigned="true"
+                      protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
       <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
         <ds:X509Data>
           <ds:X509Certificate>$CERT</ds:X509Certificate>
         </ds:X509Data>
       </ds:KeyInfo>
-    </KeyDescriptor>
-    <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="$BASEURL/logout"/>
-    <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="$BASEURL/postResponse" index="0"/>
-  </SPSSODescriptor>
+    </md:KeyDescriptor>
+    <md:KeyDescriptor use="encryption">
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:X509Data>
+          <ds:X509Certificate>$CERT</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://192.168.50.4/registry/auth/sp/postResponse" index="1"/>
+  </md:SPSSODescriptor>
   <md:Organization>
-    <md:OrganizationName xml:lang="en">$ORGANISATION</md:OrganizationName>
-    <md:OrganizationDisplayName xml:lang="en">$ORGANISATION</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">$ORGANISATION_URL</md:OrganizationURL>
+    <md:OrganizationName xml:lang="en-US">$ORGANISATION</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en-US">$ORGANISATION</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en-US">$ORGANISATION_URL</md:OrganizationURL>
   </md:Organization>
   <md:ContactPerson contactType="technical">
     <md:GivenName>$GIVEN_NAME</md:GivenName>
     <md:SurName>$SURNAME</md:SurName>
     <md:EmailAddress>$EMAIL_CONTACT</md:EmailAddress>
   </md:ContactPerson>
-</EntityDescriptor>
+</md:EntityDescriptor>
 EOF
 
 umask 0777
