@@ -22,7 +22,7 @@
       url: "https://github.com/Internet2/comanage-registry/archive/{{ comanage_version }}.tar.gz"
       dest: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
     register: comanage_downloaded
-    when: (comanage_version != "develop")
+    #    when: (comanage_version != "develop")
 
   - name: Unarchive comanage source
     become_user: www-data
@@ -38,6 +38,19 @@
       src: "/var/www/html/comanage-registry-{{ comanage_version }}"
       dest: "{{ registry_path }}"
       state: link
+
+  - name: Adding non-core plugins
+    file:
+      src: /var/www/html/registry/app/AvailablePlugin/{{ item }}
+      dest: /var/www/html/registry/local/Plugin/{{ item }}
+      owner: www-data
+      group: www-data
+      mode: 0644
+      state: link
+    with_items:
+      - LdapServiceTokenProvisioner
+      - CoServiceToken
+    when: (comanage_version == "develop")
 
   - name: Check for comanage tmp directory
     stat:

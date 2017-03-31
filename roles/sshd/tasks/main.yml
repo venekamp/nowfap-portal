@@ -20,7 +20,7 @@
 - name: Copy authorized key script
   copy:
     src: roles/sshd/files/get-authorized-keys.sh
-    dest: /usr/local/bin/ 
+    dest: /usr/local/bin/
     owner: nobody
     group: nogroup
     mode: 0700
