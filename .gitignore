@@ -1,3 +1,5 @@
+.vagrant
 comanage.retry
 machines.txt
 inventories
+*.log
