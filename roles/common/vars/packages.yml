@@ -1,24 +1,25 @@
 ---
 packages:
   - apache2
-  - php5.6
-  - php5.6-fpm
+  - certbot
+  - ldap-utils
+  - libapache2-mod-auth-mellon
+  - libapache2-mod-php5.6
+  - libmysqlclient-dev
+  - libpq-dev
   - mysql-client
   - mysql-server
-  - php5.6-mysql
-  - libpq-dev
-  - libmysqlclient-dev
-  - python-mysqldb
-  - libapache2-mod-php5.6
-  - php5.6-mcrypt
-  - php5.6-xsl
-  - php5.6-mbstring
-  - libapache2-mod-auth-mellon
-  - python-letsencrypt-apache
-  - postfix
-  - ldap-utils
-  - phpldapadmin
+  - php5.6
+  - php5.6-fpm
   - php5.6-ldap
+  - php5.6-mbstring
+  - php5.6-mcrypt
+  - php5.6-mysql
+  - php5.6-xsl
+  - phpldapadmin
+  - postfix
+  - python-certbot-apache
+  - python-mysqldb
 
 packagesfastcgi:
   - libapache2-mod-fastcgi

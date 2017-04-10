@@ -1,0 +1,9 @@
+---
+
+certbot_arguments:
+  - certonly
+  - --non-interactive
+  - --{{ certbot_plugin }}
+  - --agree-tos
+  - --email {{ email_contact }}
+  - -d {{ sp_hostname }}

@@ -1,0 +1,20 @@
+---
+
+- name: Check if FQDN is resolvable
+  command: dig @8.8.8.8 {{ sp_hostname }}
+  register: dig
+
+- set_fact:
+  args:
+    resolvable_fqdn: "{{ dig.stdout | search('.*HEADER.*NOERROR.*') }}"
+
+- debug:
+    var: resolvable_fqdn
+
+- include: "letsencrypt.yml"
+  static: no
+  when: resolvable_fqdn
+
+- include: "self-signed-certificate.yml"
+  static: no
+  when: not resolvable_fqdn

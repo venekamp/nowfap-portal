@@ -113,6 +113,7 @@ The playbook executes the following roles:
 | ---------- | ----------- |
 apache       | The portal is build with Apache. |
 auth_mellon  | Install and configure an Apache module for external SAML Authentication. |
+certificate  | Obtain or create a self signed certificate and install it. |
 comanage     | COmanage provides a portal in which the use case are implemented. |
 common       | A number of command task, like package installation. |
 ldap         | LDAP is used to store attributes (ASP, OTP, SSH Pub key, etc) collected by COmanage. |
@@ -122,25 +123,30 @@ phpldapadmin | Web interface to an LDAP instance. |
 sshd         | Setting up an SSH daemon that is able to retrieve SSH keys from an LDAP instance. |
 surfconext   | Necessary metadata is fetched and verified in order to make the SAML flow work. |
 
-# Caveats
-There are number of caveats that you should be aware of.
+# Certificates
+You typically need self signed certificates when you are deploying local
+virtual machine. Usually, the configured network will be a NAT one and thus
+the machines are typically not accessible from the outside. When deploying to
+VMs that are reachable from the outside, you can use a trusted certificate
+from Let's Encrypt.
 
-## Install certificates yourself
-The playbook currently does not setup certificates for you. Instead, it
-is expected that certificates are already installed on the target
-machine.  To support this, two variables are defined:
-- certificate
-- certificate_key
+The `certificate` role can either obtain a certificate through Let's Encrypt,
+or create a self signed one. The certificate role tries to determine if the
+supplied sp_hostname is resolvable. If it is, Let's Encrypt is used to
+generate a valid certificate. If not, a self signed certificate is generated
+instead.
 
-The first one, `certificate` points to the installed certificate, while
-`certificate_key` points to the corresponding key. Use the `portal.yml`
-group vars file to change the values, otherwise you will fallback to
-default values.
+## Certificate and key location
+The name of the certificate is determined from the host and domain names.
+However, the path to where the certificate and it private key can be found
+must be specified. There are two variables that take care of this:
+- certificate_path
+- certificate_key_path
 
 | Variable | Default value |
-| -------- | ------------ |
-| certificate     | /etc/ssl/cert/portal.example.org.pem    |
-| certificate_key | /etc/ssl/private/portal.example.org.key |
+| -------- | ------------- |
+| certificate_path     | /etc/ssl/cert/    |
+| certificate_key_path | /etc/ssl/private/ |
 
 ## Do not forget to specify parameters for mod_mellon
 In order for mod_mellon to do the right thing, it needs to know a few

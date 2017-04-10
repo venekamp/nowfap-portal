@@ -1,0 +1,19 @@
+---
+
+- include_vars: "letsencrypt.yml"
+
+- name: Determine if Apache is running
+  command: systemctl is-active apache2
+  failed_when: false
+  register: apache2_active
+
+- set_fact:
+    certbot_plugin: apache
+  when: apache2_active.stdout == 'active'
+
+- set_fact:
+    certbot_plugin: standalone
+  when: apache2_active.stdout == 'inactive'
+
+- name: Create a let's encrypt certificate
+  command: certbot {{ certbot_arguments | join(' ') }}
