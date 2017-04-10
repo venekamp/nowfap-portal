@@ -69,7 +69,7 @@
 - name: Copy the unpacked ldifs
   copy:
     src: /tmp/{{ eduPersonSchema_ldif }}
-    dest: /vagrant/ansible/nowfap-portal/{{ ldap_schema_dir }}/{{ eduPersonSchema_ldif }}
+    dest: "{{ ldap_schema_dir }}/{{ eduPersonSchema_ldif }}"
     remote_src: True
 
 - name: Check if eduPerson schema is already present
