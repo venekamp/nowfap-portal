@@ -10,6 +10,19 @@ ip_address      = IPAddr.new('192.168.64.10')
 machinesNames   = Array["portal", "ldap", "ssh"]
 machines        = Hash.new
 
+ldap_admin = "admin"
+ldap_passwd = "Please-change-me!"
+
+#  Contruct the ldap_basedn based on the domain variable.
+ldap_basedn = ""
+domainComponents = domain.split('.')
+domainComponents.each_with_index do |dc, index|
+    ldap_basedn = ldap_basedn + "dc=#{dc}"
+    if index != (domainComponents.length - 1)
+        ldap_basedn = ldap_basedn + ","
+    end
+end
+
 #  Determine IP addresses to the VMs.
 machinesNames.each { |machineName|
     machines.store(machineName, ip_address.to_s)
@@ -73,6 +86,21 @@ Vagrant.configure("2") do |config|
         end
         ldap.vm.network "private_network", ip: "192.168.64.11"
         ldap.vm.hostname = "ldap.#{domain}"
+
+        ldap.vm.provision "ansible" do |ansible|
+            ansible.playbook = "comanage.yml"
+
+            ansible.groups = {
+                "ldap" => ["ldap"],
+
+                "ldap:vars" => {
+                    "ldap_admin" => "#{ldap_admin}",
+                    "ldap_admin_passwd" => "#{ldap_passwd}",
+                    "ldap_basedn" => "#{ldap_basedn}",
+                    "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}"
+                }
+            }
+        end
     end
 
     config.vm.define "ssh" do |ssh|
@@ -82,5 +110,20 @@ Vagrant.configure("2") do |config|
         end
         ssh.vm.network "private_network", ip: "192.168.64.12"
         ssh.vm.hostname = "ssh.#{domain}"
-    end
+
+        ldap.vm.provision "ansible" do |ansible|
+            ansible.playbook = "comanage.yml"
+
+            ansible.groups = {
+                "ssh" => ["ssh"],
+
+                "ssh:vars" => {
+                    "ldap_admin" => "#{ldap_admin}",
+                    "ldap_admin_passwd" => "#{ldap_passwd}",
+                    "ldap_basedn" => "#{ldap_basedn}",
+                    "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}"
+                }
+            }
+        end
+     end
 end
