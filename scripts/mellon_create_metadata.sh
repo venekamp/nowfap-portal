@@ -160,7 +160,7 @@ cat >"$OUTFILE.xml" <<EOF
 <?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
                      xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
-                     entityID="https://192.168.50.4/registry/auth/sp/metadata">
+                     entityID="https://$(hostname -f)/registry/auth/sp/metadata">
   <md:SPSSODescriptor AuthnRequestsSigned="true"
                       WantAssertionsSigned="true"
                       protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
