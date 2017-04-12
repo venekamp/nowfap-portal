@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
 
         portal.vm.provision "shell", inline: $python2
 
-        portal.vm.provision "ansible" do |ansible|
+        portal.vm.provision "ansible_local" do |ansible|
             ansible.playbook = "comanage.yml"
 
             ansible.groups = {
@@ -87,7 +87,7 @@ Vagrant.configure("2") do |config|
         ldap.vm.network "private_network", ip: "192.168.64.11"
         ldap.vm.hostname = "ldap.#{domain}"
 
-        ldap.vm.provision "ansible" do |ansible|
+        ldap.vm.provision "ansible_local" do |ansible|
             ansible.playbook = "comanage.yml"
 
             ansible.groups = {
@@ -111,7 +111,7 @@ Vagrant.configure("2") do |config|
         ssh.vm.network "private_network", ip: "192.168.64.12"
         ssh.vm.hostname = "ssh.#{domain}"
 
-        ldap.vm.provision "ansible" do |ansible|
+        ssh.vm.provision "ansible_local" do |ansible|
             ansible.playbook = "comanage.yml"
 
             ansible.groups = {
