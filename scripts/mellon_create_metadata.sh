@@ -160,7 +160,7 @@ cat >"$OUTFILE.xml" <<EOF
 <?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
                      xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
-                     entityID="https://$(hostname -f)/registry/auth/sp/metadata">
+                     entityID="$ENTITYID">
   <md:SPSSODescriptor AuthnRequestsSigned="true"
                       WantAssertionsSigned="true"
                       protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -180,7 +180,7 @@ cat >"$OUTFILE.xml" <<EOF
       </ds:KeyInfo>
     </md:KeyDescriptor>
    <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://192.168.50.4/registry/auth/sp/postResponse" index="1"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="$BASEURL/postResponse" index="1"/>
   </md:SPSSODescriptor>
   <md:Organization>
     <md:OrganizationName xml:lang="en-US">$ORGANISATION</md:OrganizationName>
