@@ -4,7 +4,18 @@ packages:
   - ldap-utils
   - unzip
 
-ldap_schema_dir: ldap_schemas
+ansible_user_home: /home/{{ ansible_user }}
+
+bin_dir:         "{{ ansible_user_home }}/bin"
+ldap_schema_dir: "{{ ansible_user_home }}/ldap_schemas"
+ldif_dir:        "{{ ansible_user_home }}/ldif"
+downloads_dir:   "{{ ansible_user_home }}/downloads"
+
+directories:
+  - "{{ bin_dir }}"
+  - "{{ ldap_schema_dir }}"
+  - "{{ ldif_dir }}"
+  - "{{ downloads_dir }}"
 
 eduPersonSchema_ldif: openLdapEduperson-201602DV.ldif
 eduPersonSchema_zip: 2xOpenLdapEduPerson-201602.zip
