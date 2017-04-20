@@ -1,8 +1,18 @@
 ---
-
-certificate: /etc/ssl/certs/portal.example.org.pem
-certificate_key: /etc/ssl/private/portal.example.org.key
-
 sp_protocol: https://
 sp_hostname: portal.example.org
 sp_path: registry/auth/sp
+
+certificate: "/etc/ssl/certs/{{ sp_hostname }}.pem"
+certificate_key: "/etc/ssl/private/{{ sp_hostname }}.key"
+
+comanage_version: "develop"
+given_name: "John"
+surname: "Doe"
+email_contact: "john.doe@example.org"
+organisation: "Example.com Ltd."
+subject: "/C=NL/ST=North-Holland/L=Amsterdam/O=IT/CN={{ sp_hostname }}"
+cert_days_valid: 365
+cert_key_dest: "/etc/ssl/private/{{ sp_hostname }}.key"
+cert_dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"
+
