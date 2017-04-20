@@ -19,7 +19,7 @@ subject             = "/C=NL/ST=North-Holland/L=Amsterdam/O=IT/CN=#{fqdn_name}"
 ssl_cert_days_valid = 365
 
 ip_address          = IPAddr.new('192.168.64.10')
-machineIP           = Hash.new
+machineIP           = Hash.new(machinesNames.length)
 
 ldap_admin          = "admin"
 ldap_passwd         = "Please-change-me!"
@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
             vbox.memory = 1024
             vbox.name = "portal"
         end
-        portal.vm.network "private_network", ip: "#{machineIP["portal"]}"
+        portal.vm.network "private_network", ip: "#{machineIP[machinesNames[0]]}"
         portal.vm.hostname = "portal.#{domain}"
    end
 
@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
             vbox.memory = "512"
             vbox.name = "ldap"
         end
-        ldap.vm.network "private_network", ip: "#{machineIP["ldap"]}"
+        ldap.vm.network "private_network", ip: "#{machineIP[machinesNames[1]]}"
         ldap.vm.hostname = "ldap.#{domain}"
    end
 
@@ -71,13 +71,12 @@ Vagrant.configure("2") do |config|
             vbox.memory = "512"
             vbox.name = "ssh"
         end
-        ssh.vm.network "private_network", ip: "#{machineIP["ssh"]}"
+        ssh.vm.network "private_network", ip: "#{machineIP[machinesNames[2]]}"
         ssh.vm.hostname = "ssh.#{domain}"
     end
 
     config.vm.provision "ansible_local" do |ansible|
         ansible.playbook = "comanage.yml"
-
         ansible.extra_vars = { ansible_user: 'ubuntu' }
 
         ansible.groups = {
