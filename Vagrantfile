@@ -5,7 +5,7 @@ require 'ipaddr'
 require 'securerandom'
 
 #  Please change the below values to something that makes sence to you.
-comanage_version    = "develop"
+comanage_version    = "2.0.0"
 
 machinesNames       = Array["portal", "ldap", "ssh"]
 domain              = "example.org"
