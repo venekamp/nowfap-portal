@@ -11,7 +11,8 @@ SAML response.
 
 This codebase contains all the roles/playbooks and templates to
 configure a COmanage VMs.  The target Linux distribution for COmanage
-server is Ubuntu Server 16.04
+server is Ubuntu Server 16.04. Target machines should have a user named 'ubuntu'
+with sudo powers and the root user should have passwordless access to MySQL.
 
 Machines are provisioned as follows:
 
@@ -26,7 +27,7 @@ inventory. See the `inventory` directory. The with this example
 inventory, the above command will become:
 
 ```
-ansible-playbook -i inventory/example/hosts comanage.yml
+ansible-playbook -i inventories/example/hosts comanage.yml
 ```
 
 ## Example inventory
