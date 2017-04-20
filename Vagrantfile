@@ -77,22 +77,8 @@ Vagrant.configure("2") do |config|
 
     config.vm.provision "ansible_local" do |ansible|
         ansible.playbook = "comanage.yml"
-#        ansible.verbose = true
-#        ansible.install = true
-#        ansible.install_mode = "pip"
-#        ansible.version = "2.2.1.0"
 
-        ansible.host_vars = {
-            "#{machinesNames[0]}" => {
-                "ansible_user" => "ubuntu"
-            },
-            "#{machinesNames[1]}" => {
-                "ansible_user" => "ubuntu"
-            },
-            "#{machinesNames[2]}" => {
-                "ansible_user" => "ubuntu"
-            }
-        }
+        ansible.extra_vars = { ansible_user: 'ubuntu' }
 
         ansible.groups = {
             "all" => ["#{machinesNames[0]}", "#{machinesNames[1]}", "#{machinesNames[2]}"],
