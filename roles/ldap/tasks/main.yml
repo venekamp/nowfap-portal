@@ -25,16 +25,13 @@
     mode: 0755
   tags: ldap
   with_items:
-    - bin
-    - "{{ ldap_schema_dir }}"
-    - ldifs
-    - downloads
+    - "{{ directories }}"
 
 - name: Copy schema2ldif
   become_user: "{{ ansible_user }}"
   copy:
     src: roles/ldap/files/schema2ldif
-    dest: bin/
+    dest: "{{ bin_dir }}/"
     mode: 0755
 
 - name: Fetch the eduPerson schema
@@ -42,7 +39,7 @@
   become: True
   get_url:
     url: "{{ eduPersonSchema_url }}"
-    dest: downloads/
+    dest: "{{ downloads_dir }}"
 
 - name: Fetch LdapPublicKey schema
   become_user: "{{ ansible_user }}"
@@ -53,7 +50,7 @@
 
 - name: Convert schema to ldif format
   become_user: "{{ ansible_user }}"
-  command: bin/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema
+  command: "{{ bin_dir }}/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema"
 
 # Of course the unarchive module should be used here, but the things is,
 # it seems broken in 2.2.0, although it should be fixed in 2.1.1. I guess
@@ -61,7 +58,7 @@
 - name: Unzipping downloaded schema
   become_user: "{{ ansible_user }}"
   become: True
-  command: unzip -o downloads/{{ eduPersonSchema_zip }} -d /tmp
+  command: unzip -o {{ downloads_dir }}/{{ eduPersonSchema_zip }} -d /tmp
 
 # OpenLDAP does not like adding exisiting entries again. Only add the
 # schema if it has not been added already. This does not yet take care
@@ -106,7 +103,7 @@
   become: True
   template:
     src: "{{ item }}"
-    dest: ldifs/{{ item | basename | regex_replace('.j2', '') }}
+    dest: "{{ ldif_dir }}/{{ item | basename | regex_replace('.j2', '') }}"
     mode: 0644
   with_fileglob:
     - ../templates/*.ldif.j2
@@ -117,7 +114,7 @@
     state: started
 
 - name: Ensure the ldap admin credentials are set
-  command: ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f ldifs/set_root_credentials.ldif
+  command: ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f {{ ldif_dir }}/set_root_credentials.ldif
 
 - name: Check if DIT has been created before
   command:
@@ -129,7 +126,7 @@
   become_user: "{{ ansible_user }}"
   become: True
   command:
-    ldapadd -c -x -D cn={{ ldap_admin }},{{ ldap_basedn }} -w {{ ldap_admin_passwd }} -f ldifs/initial_setup.ldif
+    ldapadd -c -x -D cn={{ ldap_admin }},{{ ldap_basedn }} -w {{ ldap_admin_passwd }} -f {{ ldif_dir }}/initial_setup.ldif
   register: result
   failed_when: "(result.rc not in [0, 68])"
   tags: ldap
