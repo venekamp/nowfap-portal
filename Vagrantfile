@@ -4,27 +4,52 @@
 require 'ipaddr'
 require 'securerandom'
 
-#  Please change the below values to something that makes sence to you.
+#####
+#
+#  Please change the below values to something that makes sense to you.
+#
+#####
 comanage_version    = "2.0.0"
 
-machinesNames       = Array["portal", "ldap", "ssh"]
+# Define the host name for each of the three VMs
+hostname_portal     = "portal"
+hostname_ldap       = "ldap"
+hostname_ssh        = "ssh"
+
+# Define the start address of the first VM. Successive VMs will get
+# successive IP addresses.
+start_ip_address    = IPAddr.new('192.168.64.10')
+
+# These values, amongst others, are used to create the SP metadata
 domain              = "example.org"
-fqdn_name           = "#{machinesNames[0]}.#{domain}"
-ldap_fqdn_name      = "#{machinesNames[1]}.#{domain}"
 given_name          = "John"
 surname             = "Doe"
 email               = "john.doe@example.org"
+
+# These values are used for certificates
+country             = "NL"
+state               = "North-Holland"
+locality            = "Amsterdam"
 organisation        = "Example.org Ltd."
-subject             = "/C=NL/ST=North-Holland/L=Amsterdam/O=IT/CN=#{fqdn_name}"
+organisation_unit   = "IT"
 ssl_cert_days_valid = 365
 
-ip_address          = IPAddr.new('192.168.64.10')
-machineIP           = Hash.new(machinesNames.length)
-
+# The credentials for the admin user in LDAP
 ldap_admin          = "admin"
 ldap_passwd         = "Please-change-me!"
 
-#  Contruct the ldap_basedn based on the domain variable.
+#####
+#
+#  No need to change anything below these lines.
+#
+#####
+
+machinesNames       = Array[hostname_portal, hostname_ldap, hostname_ssh]
+fqdn_name           = "#{machinesNames[0]}.#{domain}"
+ldap_fqdn_name      = "#{machinesNames[1]}.#{domain}"
+subject             = "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{fqdn_name}"
+
+#  Construct the ldap_basedn based on the domain variable.
 ldap_basedn = ""
 domainComponents = domain.split('.')
 domainComponents.each_with_index do |dc, index|
@@ -35,6 +60,8 @@ domainComponents.each_with_index do |dc, index|
 end
 
 #  Determine IP addresses to the VMs.
+machineIP = Hash.new(machinesNames.length)
+ip_address = start_ip_address
 machinesNames.each { |machineName|
     machineIP.store(machineName, ip_address.to_s)
     ip_address = ip_address.succ
@@ -53,7 +80,7 @@ Vagrant.configure("2") do |config|
             vbox.memory = 1024
             vbox.name = "portal"
         end
-        portal.vm.network "private_network", ip: "#{machineIP[machinesNames[0]]}"
+        portal.vm.network "private_network", ip: "#{machineIP[hostname_portal]}"
         portal.vm.hostname = "portal.#{domain}"
    end
 
@@ -62,7 +89,7 @@ Vagrant.configure("2") do |config|
             vbox.memory = "512"
             vbox.name = "ldap"
         end
-        ldap.vm.network "private_network", ip: "#{machineIP[machinesNames[1]]}"
+        ldap.vm.network "private_network", ip: "#{machineIP[hostname_ldap]}"
         ldap.vm.hostname = "ldap.#{domain}"
    end
 
@@ -71,7 +98,7 @@ Vagrant.configure("2") do |config|
             vbox.memory = "512"
             vbox.name = "ssh"
         end
-        ssh.vm.network "private_network", ip: "#{machineIP[machinesNames[2]]}"
+        ssh.vm.network "private_network", ip: "#{machineIP[hostname_ssh]}"
         ssh.vm.hostname = "ssh.#{domain}"
     end
 
