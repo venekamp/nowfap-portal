@@ -124,7 +124,7 @@ Vagrant.configure("2") do |config|
             "comanage-portal:vars" => {
                 "certificate" => "/etc/ssl/certs/#{fqdn_name}.pem",
                 "certificate_key" => "/etc/ssl/private/#{fqdn_name}.key",
-                "sp_hostname" => "#{fqdn_name}",
+                "sp_hostname" => "#{machineIP[hostname_portal]}",
                 "sp_protocol" => "https://",
                 "sp_path" => "/registry/auth/sp",
                 "sp_random_part" => SecureRandom.uuid,
