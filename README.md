@@ -19,13 +19,14 @@ SAML response.
     * [Do not forget to specify parameters for mod_mellon](#do-not-forget-to-specify-parameters-for-mod_mellon)
 * [Installing local VMs with Vagrant](#installing-local-vms-with-vagrant)
     * [Configuration](#configuration)
+        * [Choosing a non Resolvable FQDN](#choosing-a-non-resolvable-fqdn)
+    * [Creating and Provisioning of the VMs](#creating-and-provisioning-of-the-vms)
 * [Registering with an Identity Provider](#registering-with-an-identity-provider)
     * [Getting your metadata](#getting-your-metadata)
 
 <!-- vim-markdown-toc -->
 
 # Ansible playbooks and roles to install COmanage virtual machine.
-
 This codebase contains all the roles/playbooks and templates to
 configure a COmanage VMs.  The target Linux distribution for COmanage
 server is Ubuntu Server 16.04. Target machines should have a user named 'ubuntu'
@@ -79,7 +80,7 @@ portal.example.org  ansible_user=ansible
 ```
 The `ldap-server` and `ssh-access` hosts are placed in the same group,
 as they share the IP address of the LDAP server.
-
+server
 Together with the above hosts file, `group_vars` are created as well.
 Below an example of the group variables is given:
 
@@ -227,6 +228,26 @@ change them, your certificate will look much nicer.
 Finally, you probably would want to change the 'ldap_passwd'. It always
 good practice to change any given default passwords.
 
+### Choosing a non Resolvable FQDN
+The Ansible playbook will try to detect if the supplies host name and
+domain name, i.e. the Fully Quantified Domain Name (FQDN), is resolvable
+or not. If it is, Let's Encrypt will be used to get a valid certificate.
+If you do not control this host, the certificate creation will fail and
+hence the provisioning is aborted. To circumvent this, choose a domain
+name that does not exists, or at the very least, choose a host name and
+domain name combination that is unresolvable. If the fully qualified
+domain name (FQDN) is unresolvable, a self signed certificate is created
+instead.
+
+## Creating and Provisioning of the VMs
+As stated, the supplied Vagrantfile will create and provision three VMs:
+'portal', 'ldap' and 'ssh'. The first VM, 'portal', is configured to
+have 1GB of memory, the other two are configured with 512MB of memory.
+To create and provision the three VMs execute the following command:
+```
+vagrant up
+```
+
 # Registering with an Identity Provider
 Having successfully provisioned the target machines, whether or not you
 are using local VMs, one last thing that is necessary is establishing a
@@ -234,7 +255,7 @@ trust relation with an Identity Provider (IdP). This trust is based on
 the exchange of metadata. During the provisioning process, the metadata
 of the IdP has already been imported and thereby anything the IdP sends
 to you is trusted. However, the IdP cannot trust you yet. It does not
-have _your_ metadata. The require metadata has already been created
+have _your_ metadata. The required metadata has already been created
 during the provisioning process. All that needs to be done is send a copy
 to the IdP.
 
@@ -246,4 +267,4 @@ should also be able to find the metadata at:
 metadata registered is giving the URL to the IdP. It can then download
 the metadata itself. However, if you are using a local VM, the IP
 address might be private and behind a NAT. In this case you must send
-the metadata yourself.
+the metadata yourself and not the URL.
