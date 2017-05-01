@@ -99,6 +99,18 @@ if [ -z "$ORGANISATION_URL" ]; then
     exit 1
 fi
 
+SERVICE_DESCRIPTION="$8"
+if [[ -z "$SERVICE_DESCRIPTION" ]]; then
+    echo "$PORG: The service description is required." >&2
+    exit 1
+fi
+
+DISPLAY_NAME="$9"
+if [[ -z "$DISPLAY_NAME" ]]; then
+    echo "$PORG: The display name is required." >&2
+    exit 1
+fi
+
 if ! echo "$BASEURL" | grep -q '^https\?://'; then
     echo "$PROG: The URL must start with \"http://\" or \"https://\"." >&2
     exit 1
@@ -127,6 +139,8 @@ echo "Give name:                 $GIVEN_NAME"
 echo "Surname:                   $SURNAME"
 echo "Organisation:              $ORGANISATION"
 echo "Organisation URL:          $ORGANISATION_URL"
+echo "Service description:       $SERVICE_DESCRIPTION"
+echo "Display name:              $DISPLAY_NAME"
 echo
 
 # No files should not be readable by the rest of the world.
@@ -166,9 +180,9 @@ cat >"$OUTFILE.xml" <<EOF
                       protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:Extensions>
       <mdui:UIInfo>
-        <mdui:DisplayName xml:lang="en">COmanage DEMO - $GIVEN_NAME $SURNAME</mdui:DisplayName>
+        <mdui:DisplayName xml:lang="en">$DISPLAY_NAME</mdui:DisplayName>
         <mdui:Description xml:lang="en">
-          This is a demo instance for the COmanage hackathon.
+          $SERVICE_DESCRIPTION
         </mdui:Description>
       </mdui:UIInfo>
     </md:Extensions>

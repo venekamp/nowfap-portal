@@ -25,6 +25,8 @@ domain              = "example.org"
 given_name          = "John"
 surname             = "Doe"
 email               = "john.doe@example.org"
+service_description = "This is a demo instance for COmanage testing purposes"
+display_name        = "COmanage DEMO - #{given_name} #{surname}"
 
 # These values are used for certificates
 country             = "NL"
@@ -128,6 +130,8 @@ Vagrant.configure("2") do |config|
                 "sp_protocol" => "https://",
                 "sp_path" => "/registry/auth/sp",
                 "sp_random_part" => SecureRandom.uuid,
+                "service_description" => "#{service_description}",
+                "service_display_name" => "#{display_name}",
                 "comanage_version" => "#{comanage_version}",
                 "given_name" => "#{given_name}",
                 "surname" => "#{surname}",
