@@ -1,5 +1,4 @@
-https://travis-ci.org/venekamp/nowfap-portal.svg?branch=master
-
+[![Build Status](https://travis-ci.org/venekamp/nowfap-portal.svg?branch=travis-ci)](https://travis-ci.org/venekamp/nowfap-portal)
 NowFap -  NOn Web Federated Authentication Portal
 ======
 
