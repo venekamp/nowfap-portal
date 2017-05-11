@@ -1,0 +1,34 @@
+---
+
+# We need sudo for some of the Docker commands.
+sudo: required
+
+language: python
+
+env:
+    # Provide a list of OSes we want to use for testing.
+    - distro: ubuntu1604
+#        init: /lib/systemd/systemd
+#        run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+
+# Tell Travis to start Docker when it brings up an environment.
+services:
+    - docker
+
+before_install:
+    # Pull the image from Docker Hub for the OS under test.
+    #- 'docker pull geerlingguy/docker-${distro}-ansible:latest'
+    docker build -t venekamp/docker-${distro}:latest .
+
+#install:
+
+script:
+  # Start the container from the image and perform tests.
+
+  # Create a random file to store the container ID.
+  - container_id=$(mktemp)
+
+    #- 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
+
+#notifications:
+  # Notify Ansible Galaxy when a role builds successfully.
