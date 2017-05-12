@@ -1,6 +1,10 @@
 ---
-- include_vars: "packages.yml"
-- include_vars: "repositories.yml"
+- name: Include packages
+  include_vars:
+    file: "{{ item }}.yml"
+  with_items:
+    - packages
+    - repositories
 
 #Command for switch from apache2_handler to php-fpm
 #- name: Remove a repo
