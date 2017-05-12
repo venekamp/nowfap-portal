@@ -9,5 +9,6 @@ RUN pip install --upgrade pip
 RUN pip install ansible
 RUN pip install molecule
 RUN pip install tox-travis
+RUN pip install python-tox
 
 EXPOSE 443
