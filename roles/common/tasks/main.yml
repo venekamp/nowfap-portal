@@ -18,6 +18,9 @@
   apt:
     name: ca-certificates
     state: latest
+  tags:
+    # ansible-lint complains about state: latest and we do want this.
+    - skip_ansible_lint
 
 # Add an apt key for the ppas by id from a keyserver
 - name: Add ppa repository keys
@@ -31,13 +34,13 @@
   with_items: "{{ repositories }}"
   become: Yes
 
-- name: perform apt-get update
+- name: Perform apt-get update
   apt:
     update_cache: yes
     cache_valid_time: 360
   become: Yes
 
-- name: ensure that packages are installed
+- name: Ensure that packages are installed
   apt:
     name: "{{ item }}"
     state: present
