@@ -8,5 +8,6 @@ RUN apt-get install -y gcc python python-pip wget libssl-dev libffi-dev
 RUN pip install --upgrade pip
 RUN pip install ansible
 RUN pip install molecule
+RUN pip install tox-travis
 
 EXPOSE 443
