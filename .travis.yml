@@ -30,5 +30,7 @@ script:
 
     #- 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
 
-#notifications:
-  # Notify Ansible Galaxy when a role builds successfully.
+notifications:
+  slack:
+    rooms:
+      - comanage-surf:0yPI3AxTGb0WnDhBPuQsDXlm#travis-ci
