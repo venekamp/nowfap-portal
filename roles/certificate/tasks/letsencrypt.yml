@@ -7,13 +7,24 @@
   failed_when: false
   register: apache2_active
 
-- set_fact:
+- name: Set certbot_plugin to apache in case apache is runnung
+  set_fact:
     certbot_plugin: apache
   when: apache2_active.stdout == 'active'
 
-- set_fact:
+- name: Set certbot_plugin to standalone in case in not running
+  set_fact:
     certbot_plugin: standalone
-  when: apache2_active.stdout == 'inactive'
+  when: (apache2_active.stdout == 'inactive') or
+        (apache2_active.stdout == 'failed')
 
 - name: Create a let's encrypt certificate
   command: certbot {{ certbot_arguments | join(' ') }}
+
+- name: Link to certificate
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  with_items:
+    - "{{ certificate_files }}"

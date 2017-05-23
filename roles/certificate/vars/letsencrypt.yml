@@ -7,3 +7,7 @@ certbot_arguments:
   - --agree-tos
   - --email {{ email_contact }}
   - -d {{ sp_hostname }}
+
+certificate_files:
+  - { src: "/etc/letsencrypt/live/{{ sp_hostname }}/cert.pem", dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"      }
+  - { src: "/etc/letsencrypt/live/{{ sp_hostname }}/privkey.pem", dest: "/etc/ssl/private/{{ sp_hostname }}.key" }
