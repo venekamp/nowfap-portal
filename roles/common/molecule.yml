@@ -13,3 +13,8 @@ verifier:
 
 ansible:
   playbook: test-playbook.yml
+
+molecule:
+  ignore_paths:
+    - .tox
+    - .molecule
