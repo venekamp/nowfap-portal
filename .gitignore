@@ -4,3 +4,5 @@ machines.txt
 inventories
 *.log
 .molecule
+.tox
+__pycache__
