@@ -1,12 +1,12 @@
 sudo: required
 language: python
 env:
-- distro: ubuntu1604
+  - distro=ubuntu1604
 services:
-- docker
+  - docker
 before_install: docker build -t venekamp/docker-${distro}:latest .
 script:
-- tox
+  - scripts/test
 notifications:
   slack:
     secure: G80cpCsZfLainv+aroa1ihiZylevz4dnwfe4yP+EsFC4P5353zY/nFdMFZRmeyNw1NRUP3F97Azf0MDHiTdh/e+6adc1rTM/d1b/lNGzvnU6QJvdPFuermkGNWI/fK29xHPOzFyz7wxKhhQjwA74T57NQ8WjTDHd6CH8TdQL4JJPGBqn7jHH1iFF0yoHTQYAy8EeH3HHZfmDoWtDB70SFUMawaBRBMZ5Sdp+e273Q4lXBhC4QRHmvr2nQvlOlbd5gFIn7cI/nM2FVVPTGDFUyixvcb35iYMnR1aj+fujK99FYX63StVMRRnUJh0hCMtSZbowYi5ksllxyQtyd8m9nREqC1C+ZSGg8Ge/cs+3mNHHHY3xh11kmCDmndn/49CGMvk1uruAnwPzxzpV8lfOQOFnSK4DAmHAHs5wxAsnJUh8DGAHdBE2wiAStTizy2dRXs7AhxFESlxJ9TkbJ2sEPjz774b0BQLQ8pKrmwD/VS9aQPJ50uocsBFo6OXPYST4usYW7IiuT5n6ViRaNW+IGOBn5b9RFDtBfnXsHUwz2CJeFiaRzXvF61jzBSgb/m94le08OtZhNqzNqJI4DlhytcKxVWVJiNTi0/ioIWg9+IRU25Mkzg3fV+vh9gSX34Q9tGVnZDMaMDvH8Llx4i6QbmZdRsZJ2tein2PvqKEKlT4=
