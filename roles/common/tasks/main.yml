@@ -1,7 +1,6 @@
 ---
 - name: Include packages
-  include_vars:
-    file: "{{ item }}.yml"
+  include_vars: "{{ item }}.yml"
   with_items:
     - packages
     - repositories
