@@ -2,7 +2,8 @@
 ### Modified by Benjamin Oshrin comanage yaml
   # Download COmanage source using tarball of specified release
   # (No need to clone git repo with extra files)
-- include_vars: comanage.yml
+- name: Include variables
+  include_vars: comanage.yml
 
 - name: Create target directories
   file:

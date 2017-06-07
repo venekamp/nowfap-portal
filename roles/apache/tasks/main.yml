@@ -1,6 +1,7 @@
 ---
 # playbook to install and configure general components of a Comanage machine
-- include_vars: "apache.yml"
+- name: Include variables
+  include_vars: apache.yml
 
 #Uncomment for active php-fpm
 #- name: disable apache module

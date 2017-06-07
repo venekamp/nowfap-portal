@@ -1,5 +1,6 @@
 ---
-- include_vars: "ldap.yml"
+- name: Include variables
+  include_vars: "ldap.yml"
   tags: always
 
 - name: perform apt-get update

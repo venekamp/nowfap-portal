@@ -1,7 +1,8 @@
 ---
 #Have fun with Mysql!
 
-- include_vars: mysql.yml
+- name: Include variables
+  include_vars: mysql.yml
 
 - name: Start the MySQL service
   service:

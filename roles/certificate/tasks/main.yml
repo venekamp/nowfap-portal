@@ -4,7 +4,8 @@
   command: dig @8.8.8.8 {{ sp_hostname }}
   register: dig
 
-- set_fact:
+- name: Set resolvable_fqdn fact based on dig output
+  set_fact:
   args:
     resolvable_fqdn: "{{ dig.stdout | search('.*HEADER.*NOERROR.*') }}"
 
