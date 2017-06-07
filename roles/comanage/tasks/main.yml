@@ -2,146 +2,146 @@
 ### Modified by Benjamin Oshrin comanage yaml
   # Download COmanage source using tarball of specified release
   # (No need to clone git repo with extra files)
-  - include_vars: comanage.yml
+- include_vars: comanage.yml
 
-  - name: Create target directories
-    file:
-      path: "{{ item.path }}"
-      state: "{{ item.state }}"
-      owner: "{{ item.owner }}"
-      group: "{{ item.group }}"
-      mode: "{{ item.mode }}"
-    with_items:
-      - { path: "/home/ubuntu/comanage/src", state: directory, owner: "ubuntu", group: "ubuntu", mode: "0755" }
-      - { path: "/var/www/html", state: directory, owner: "root", group: "www-data", mode: "0775" }
+- name: Create target directories
+  file:
+    path: "{{ item.path }}"
+    state: "{{ item.state }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { path: "/home/ubuntu/comanage/src", state: directory, owner: "ubuntu", group: "ubuntu", mode: "0755" }
+    - { path: "/var/www/html", state: directory, owner: "root", group: "www-data", mode: "0775" }
 
-  - name: Download comanage source
-    become_user: ubuntu
-    become: True
-    get_url:
-      url: "https://github.com/Internet2/comanage-registry/archive/{{ comanage_version }}.tar.gz"
-      dest: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
-    register: comanage_downloaded
-    #    when: (comanage_version != "develop")
+- name: Download comanage source
+  become_user: ubuntu
+  become: True
+  get_url:
+    url: "https://github.com/Internet2/comanage-registry/archive/{{ comanage_version }}.tar.gz"
+    dest: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
+  register: comanage_downloaded
+  #    when: (comanage_version != "develop")
 
-  - name: Unarchive comanage source
-    become_user: www-data
-    become: True
-    unarchive:
-      src: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
-      dest: "/var/www/html/"
-      copy: no
-    when: comanage_downloaded|changed
+- name: Unarchive comanage source
+  become_user: www-data
+  become: True
+  unarchive:
+    src: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
+    dest: "/var/www/html/"
+    copy: no
+  when: comanage_downloaded|changed
 
-  - name: Symlink comanage source
-    file:
-      src: "/var/www/html/comanage-registry-{{ comanage_version }}"
-      dest: "{{ registry_path }}"
-      state: link
+- name: Symlink comanage source
+  file:
+    src: "/var/www/html/comanage-registry-{{ comanage_version }}"
+    dest: "{{ registry_path }}"
+    state: link
 
-  - name: Adding non-core plugins
-    file:
-      src: /var/www/html/registry/app/AvailablePlugin/{{ item }}
-      dest: /var/www/html/registry/local/Plugin/{{ item }}
-      owner: www-data
-      group: www-data
-      mode: 0644
-      state: link
-    with_items:
-      - LdapServiceTokenProvisioner
-      - CoServiceToken
-    when: (comanage_version == "develop")
+- name: Adding non-core plugins
+  file:
+    src: /var/www/html/registry/app/AvailablePlugin/{{ item }}
+    dest: /var/www/html/registry/local/Plugin/{{ item }}
+    owner: www-data
+    group: www-data
+    mode: 0644
+    state: link
+  with_items:
+    - LdapServiceTokenProvisioner
+    - CoServiceToken
+  when: (comanage_version == "develop")
 
-  - name: Check for comanage tmp directory
-    stat:
-      path: /var/cache/registry
-    register: registry_tmp_stat
+- name: Check for comanage tmp directory
+  stat:
+    path: /var/cache/registry
+  register: registry_tmp_stat
 
-  - name: Create comanage tmp directory
-    command: cp -a {{ registry_path }}/app/tmp.dist /var/cache/registry
-    when: registry_tmp_stat.stat.exists == false
+- name: Create comanage tmp directory
+  command: cp -a {{ registry_path }}/app/tmp.dist /var/cache/registry
+  when: registry_tmp_stat.stat.exists == false
 
-  - name: Verify comanage tmp directory ownership and permissions
-    file:
-      path: /var/cache/registry
-      owner: www-data
-      mode: 0700
-      state: directory
-      recurse: yes
+- name: Verify comanage tmp directory ownership and permissions
+  file:
+    path: /var/cache/registry
+    owner: www-data
+    mode: 0700
+    state: directory
+    recurse: yes
 
-  - name: Check for comanage local tmp
-    stat:
-      path: "{{ registry_path }}/local/tmp"
-    register: registry_tmp_local_stat
+- name: Check for comanage local tmp
+  stat:
+    path: "{{ registry_path }}/local/tmp"
+  register: registry_tmp_local_stat
 
-  - name: Create comanage tmp symlink
-    file:
-      src: /var/cache/registry
-      dest: "{{ registry_path }}/local/tmp"
-      state: link
-    when: registry_tmp_local_stat.stat.exists == false
+- name: Create comanage tmp symlink
+  file:
+    src: /var/cache/registry
+    dest: "{{ registry_path }}/local/tmp"
+    state: link
+  when: registry_tmp_local_stat.stat.exists == false
 
-  - name: Check for database config
-    stat:
-      path: "{{ registry_path }}/local/Config/database.php"
-    register: registry_database_stat
+- name: Check for database config
+  stat:
+    path: "{{ registry_path }}/local/Config/database.php"
+  register: registry_database_stat
 
-  - name: Copy database config
-    command: cp {{ registry_path }}/app/Config/database.php.default {{ registry_path }}/local/Config/database.php
-    when: registry_database_stat.stat.exists == false
+- name: Copy database config
+  command: cp {{ registry_path }}/app/Config/database.php.default {{ registry_path }}/local/Config/database.php
+  when: registry_database_stat.stat.exists == false
 
-  - name: Configure database connection info
-    replace:
-      dest: "{{ registry_path }}/local/Config/database.php"
-      regexp: "{{ item.regexp }}"
-      replace: "{{ item.replace }}"
-    with_items: "{{ replace }}"
+- name: Configure database connection info
+  replace:
+    dest: "{{ registry_path }}/local/Config/database.php"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items: "{{ replace }}"
 
-  - name: Install database schema
-    command: ./Console/cake database
-    args:
-      chdir: "{{ registry_path }}/app"
-    when: registry_database_stat.stat.exists == false
+- name: Install database schema
+  command: ./Console/cake database
+  args:
+    chdir: "{{ registry_path }}/app"
+  when: registry_database_stat.stat.exists == false
 
-  - name: Check for email config
-    stat:
-      path: "{{ registry_path }}/local/Config/email.php"
-    register: registry_email_stat
+- name: Check for email config
+  stat:
+    path: "{{ registry_path }}/local/Config/email.php"
+  register: registry_email_stat
 
-  - name: Copy email config
-    command: cp {{ registry_path }}/app/Config/email.php.default {{ registry_path }}/local/Config/email.php
-    when: registry_email_stat.stat.exists == false
+- name: Copy email config
+  command: cp {{ registry_path }}/app/Config/email.php.default {{ registry_path }}/local/Config/email.php
+  when: registry_email_stat.stat.exists == false
 
-  - name: Configure database connection info
-    replace:
-      dest: "{{ registry_path }}/local/Config/database.php"
-      regexp: "{{ item.regexp }}"
-      replace: "{{ item.replace }}"
-    with_items: "{{ infodb }}"
+- name: Configure database connection info
+  replace:
+    dest: "{{ registry_path }}/local/Config/database.php"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items: "{{ infodb }}"
 
-  - name: Check for {{ registry_users_table }} in {{ registry_db }}
-    command: mysql -Nse 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = "{{ registry_db }}" AND table_name = "{{ registry_users_table }}"';
-    register: registery_cm_users_table_exists
+- name: Check for {{ registry_users_table }} in {{ registry_db }}
+  command: mysql -Nse 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = "{{ registry_db }}" AND table_name = "{{ registry_users_table }}"';
+  register: registery_cm_users_table_exists
 
-  - name: Setup Cake for login
-    command: ./Console/cake setup --admin-given-name "{{ admin_given_name }}" --admin-family-name "{{ admin_family_name }} " --admin-username "{{ admin_username }}" --enable-pooling="{{ enable_pooling }}"
-    args:
-      chdir: "{{ registry_path }}/app"
-    when: registery_cm_users_table_exists.stdout == "0"
+- name: Setup Cake for login
+  command: ./Console/cake setup --admin-given-name "{{ admin_given_name }}" --admin-family-name "{{ admin_family_name }} " --admin-username "{{ admin_username }}" --enable-pooling="{{ enable_pooling }}"
+  args:
+    chdir: "{{ registry_path }}/app"
+  when: registery_cm_users_table_exists.stdout == "0"
 
-  - name: Create a crontab entry
-    cron:
-      name: "Cake Job Cleaning"
-      state: present
-      minute: "0"
-      hour: "3"
-      user: "{{ www_user }}"
-      job: "cd /path/to/registry-source/app && Console/cake job -q"
+- name: Create a crontab entry
+  cron:
+    name: "Cake Job Cleaning"
+    state: present
+    minute: "0"
+    hour: "3"
+    user: "{{ www_user }}"
+    job: "cd /path/to/registry-source/app && Console/cake job -q"
 
-  - name: Copy comange files
-    template:
-      src: "{{ item.src }}"
-      dest: "{{ item.dest }}"
-    with_items: "{{ comanage_templates }}"
-    notify:
-      - Restart Apache
+- name: Copy comange files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ comanage_templates }}"
+  notify:
+    - Restart Apache
