@@ -1,9 +1,14 @@
 ---
+
 - name: Include packages
   include_vars: "{{ item }}.yml"
   with_items:
     - packages
     - repositories
+
+- name: Make sure ubuntu users exists
+  user:
+    name: ubuntu
 
 #Command for switch from apache2_handler to php-fpm
 #- name: Remove a repo

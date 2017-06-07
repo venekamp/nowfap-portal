@@ -20,6 +20,8 @@ packages:
   - postfix
   - python-certbot-apache
   - python-mysqldb
+  - dnsutils
+  - cron
 
 packagesfastcgi:
   - libapache2-mod-fastcgi
