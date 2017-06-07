@@ -16,3 +16,5 @@ cert_days_valid: 365
 cert_key_dest: "/etc/ssl/private/{{ sp_hostname }}.key"
 cert_dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"
 
+service_description: Example servie descrption
+service_display_name: Example service name
