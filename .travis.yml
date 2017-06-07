@@ -9,13 +9,16 @@ env:
 services:
   - docker
 
-before_install: docker pull ${distro}
+before_install:
+  - docker pull ubuntu:16.04
+  - sudo useradd -m ubuntu
 
 install:
   - pip install tox-travis
 
 script:
-  - scripts/test
+  - ln -s {distro} molecule.yml
+  - tox
 
 notifications:
   slack:
