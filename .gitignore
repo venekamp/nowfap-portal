@@ -1,8 +1,10 @@
 .vagrant
-comanage.retry
-machines.txt
-inventories
+/comanage.retry
+/machines.txt
+/inventories
+!/inventories/example
 *.log
 .molecule
 .tox
 __pycache__
+/molecule.yml
