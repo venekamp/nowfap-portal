@@ -1,0 +1,49 @@
+#!/bin/bash
+
+MOLECULE_CONF_DIR=molecule.d
+CMD="molecule test"
+
+function show_help {
+    echo "Run molecule test for all configs found in $MOLECULE_CONF_DIR"
+    echo "Usage: $0 [arguments]"
+    echo
+    echo "Arguments:"
+    echo "    --all   Run all CI tests"
+    echo "    --help  This help message"
+}
+
+function running_in_docker_container {
+    if [[ -e /proc/1/cgroup ]]; then
+        if [[ $(cat /proc/1/cgroup | grep docker) == 0 ]]; then
+            echo "docker"
+        fi
+    fi
+
+    echo "none"
+}
+
+if [[ $(running_in_docker_container) != "none" ]]; then
+    echo "$0 seems to be running inside a docker container. This script"
+    echo "should run on your local machine for testing CI."
+
+    exit 0
+fi
+
+case $1 in
+    "--all")
+        CMD=tox
+        ;;
+    "--help")
+        show_help $0
+        exit 0
+        ;;
+esac
+
+for platform in $MOLECULE_CONF_DIR/*; do
+    for config in $platform/*; do
+        ln -sf $config molecule.yml
+        $CMD
+    done
+done
+
+rm molecule.yml
