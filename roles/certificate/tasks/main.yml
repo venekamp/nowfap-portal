@@ -9,9 +9,6 @@
   args:
     resolvable_fqdn: "{{ dig.stdout | search('.*HEADER.*NOERROR.*') }}"
 
-- debug:
-    var: resolvable_fqdn
-
 - include: "letsencrypt.yml"
   static: no
   when: resolvable_fqdn
