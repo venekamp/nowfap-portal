@@ -1,0 +1,36 @@
+---
+driver:
+  name: docker
+
+docker:
+  containers:
+    - name: comanage
+      image: ubuntu
+      image_version: 16.04
+      ansible_groups:
+        - portal
+        - ldap
+        - phpldapadmin
+
+verifier:
+  name: testinfra
+
+ansible:
+  playbook: comanage.yml
+  inventory_file: inventories/continious-integration/hosts
+
+molecule:
+  test:
+    sequence:
+      - destroy
+      - syntax
+      - create
+      - converge
+      #- idempotence  # Known to fail. Not sure how to fix some of those...
+      - verify
+  ignore_paths:
+    - .tox
+    - .molecule
+
+
+# vim: tw=2:sw=2

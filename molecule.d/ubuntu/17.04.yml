@@ -1,0 +1,25 @@
+---
+driver:
+  name: docker
+
+docker:
+  containers:
+    - name: comanage
+      image: ubuntu
+      image_version: 17.04
+      ansible_groups:
+        - portal
+        - ldap
+        - phpldapadmin
+
+verifier:
+  name: testinfra
+
+ansible:
+  playbook: comanage.yml
+  inventory_file: inventories/example/hosts
+
+molecule:
+  ignore_paths:
+    - .tox
+    - .molecule

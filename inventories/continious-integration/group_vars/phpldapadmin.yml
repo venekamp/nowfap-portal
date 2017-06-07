@@ -1,0 +1,4 @@
+---
+
+ldap_server: ldap://ldap.example.org
+ldap_basedn: dc=ldap,dc=example,dc=org

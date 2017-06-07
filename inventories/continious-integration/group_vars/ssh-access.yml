@@ -1,0 +1,4 @@
+---
+
+ldap_admin_passwd: BigSecret
+ldap_basedn: dc=ldap,dc=example,dc=org
