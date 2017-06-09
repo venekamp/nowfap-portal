@@ -1,7 +1,5 @@
 ---
-### Modified by Benjamin Oshrin comanage yaml
-  # Download COmanage source using tarball of specified release
-  # (No need to clone git repo with extra files)
+
 - name: Include variables
   include_vars: comanage.yml
 
@@ -23,7 +21,6 @@
     url: "https://github.com/Internet2/comanage-registry/archive/{{ comanage_version }}.tar.gz"
     dest: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
   register: comanage_downloaded
-  #    when: (comanage_version != "develop")
 
 - name: Unarchive comanage source
   become_user: www-data
