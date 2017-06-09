@@ -3,6 +3,8 @@
 - name: Check if FQDN is resolvable
   command: dig @8.8.8.8 {{ sp_hostname }}
   register: dig
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Set resolvable_fqdn fact based on dig output
   set_fact:

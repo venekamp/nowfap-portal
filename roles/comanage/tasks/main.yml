@@ -123,6 +123,8 @@
 - name: Check for {{ registry_users_table }} in {{ registry_db }}
   command: mysql -Nse 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = "{{ registry_db }}" AND table_name = "{{ registry_users_table }}"';
   register: registery_cm_users_table_exists
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Setup Cake for login
   command: ./Console/cake setup --admin-given-name "{{ admin_given_name }}" --admin-family-name "{{ admin_family_name }} " --admin-username "{{ admin_username }}" --enable-pooling="{{ enable_pooling }}"
