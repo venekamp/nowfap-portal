@@ -67,6 +67,8 @@
   command: unzip -o {{ downloads_dir }}/{{ eduPersonSchema_zip }} -d /tmp
   args:
     creates: "{{ downloads_dir }}/{{ eduPersonSchema_zip }}"
+  tags:
+    - skip_ansible_lint
 
 # OpenLDAP does not like adding exisiting entries again. Only add the
 # schema if it has not been added already. This does not yet take care
