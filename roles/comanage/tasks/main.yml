@@ -30,6 +30,8 @@
     dest: "/var/www/html/"
     copy: no
   when: comanage_downloaded|changed
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0016]. Task cannot be turned into a handler
 
 - name: Symlink comanage source
   file:
