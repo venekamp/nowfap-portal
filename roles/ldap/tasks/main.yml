@@ -18,6 +18,7 @@
 
 - name: Ensure the a number of directories exist
   become_user: "{{ ansible_user }}"
+  become: True
   file:
     path: "{{ item }}"
     state: directory
@@ -30,6 +31,7 @@
 
 - name: Copy schema2ldif
   become_user: "{{ ansible_user }}"
+  become: True
   copy:
     src: roles/ldap/files/schema2ldif
     dest: "{{ bin_dir }}/"
@@ -51,6 +53,7 @@
 
 - name: Convert schema to ldif format
   become_user: "{{ ansible_user }}"
+  become: True
   command: "{{ bin_dir }}/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema"
   args:
     creates: "{{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema"
