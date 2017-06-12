@@ -138,7 +138,7 @@
     minute: "0"
     hour: "3"
     user: "{{ www_user }}"
-    job: "cd /path/to/registry-source/app && Console/cake job -q"
+    job: "cd {{ registry_db }} && Console/cake job -q"
 
 - name: Copy comange files
   template:
