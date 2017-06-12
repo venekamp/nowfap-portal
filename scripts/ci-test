@@ -39,7 +39,8 @@ case $1 in
         show_help $0
         exit 0
         ;;
-    "*")
+    *)
+        echo "single!"
         CMD="tox"
         config="$1"
         ;;
@@ -51,9 +52,10 @@ echo "Show dir contents of molecule.d/"
 ls -Rlsa $MOLECULE_CONF_DIR
 
 echo "Shell: $SHELL"
+echo "config: $config"
 
 if [[ "$run_count" == "single" ]]; then
-    ln -s ${config/://} molecule.yml
+    echo ln -s $MOLECULE_CONF_DIR/${config/://} molecule.yml
     $CMD
 else
     for platform in $MOLECULE_CONF_DIR/*; do
