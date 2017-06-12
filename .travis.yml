@@ -17,8 +17,7 @@ install:
   - pip install tox-travis
 
 script:
-  - ln -s {distro} molecule.yml
-  - tox
+  - scripts/ci-test
 
 notifications:
   slack:
