@@ -66,7 +66,7 @@
   become: True
   command: unzip -o {{ downloads_dir }}/{{ eduPersonSchema_zip }} -d /tmp
   args:
-    creates: "{{ downloads_dir }}/{{ eduPersonSchema_zip }}"
+    creates: "/tmp/{{ eduPersonSchema_ldif }}"
   tags:
     - skip_ansible_lint
 
