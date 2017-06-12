@@ -41,8 +41,8 @@ esac
 
 
 pwd
-echo "Show dir contents."
-ls -lsa
+echo "Show dir contents of molecule.d/"
+ls -lsa $MOLECULE_CONF_DIR
 
 for platform in $MOLECULE_CONF_DIR/*; do
     for config in $platform/*; do
