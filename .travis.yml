@@ -17,7 +17,7 @@ install:
   - pip install tox-travis
 
 script:
-  - scripts/ci-test
+  - scripts/ci-test --all
 
 notifications:
   slack:
