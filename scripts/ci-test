@@ -45,7 +45,9 @@ echo "Show dir contents of molecule.d/"
 ls -lsa $MOLECULE_CONF_DIR
 
 for platform in $MOLECULE_CONF_DIR/*; do
+    echo "Platform: $platform"
     for config in $platform/*; do
+        echo "Config: $platform/$config"
         ln -sf $config molecule.yml
         $CMD
     done
