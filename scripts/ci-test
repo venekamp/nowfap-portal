@@ -29,13 +29,19 @@ if [[ $(running_in_docker_container) != "none" ]]; then
     exit 0
 fi
 
+run_count="single"
 case $1 in
     "--all")
         CMD=tox
+        run_count="all"
         ;;
     "--help")
         show_help $0
         exit 0
+        ;;
+    "*")
+        CMD="tox"
+        config="$1"
         ;;
 esac
 
@@ -44,13 +50,17 @@ pwd
 echo "Show dir contents of molecule.d/"
 ls -lsa $MOLECULE_CONF_DIR
 
-for platform in $MOLECULE_CONF_DIR/*; do
-    echo "Platform: $platform"
-    for config in $platform/*; do
-        echo "Config: $platform/$config"
-        ln -sf $config molecule.yml
-        $CMD
+if [[ "$run_count" == "single" ]]; then
+    $CMD
+else
+    for platform in $MOLECULE_CONF_DIR/*; do
+        echo "Platform: $platform"
+        for config in $platform/*; do
+            echo "Config: $config"
+            ln -sf $config molecule.yml
+            $CMD
+        done
     done
-done
+fi
 
 rm molecule.yml
