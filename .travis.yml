@@ -17,7 +17,7 @@ install:
   - pip install tox-travis
 
 script:
-  - scripts/ci-test ${distro/://}   #  Replaces ':' by a '/'
+  - scripts/ci-test $distro
 
 notifications:
   slack:

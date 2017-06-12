@@ -32,7 +32,7 @@ fi
 run_count="single"
 case $1 in
     "--all")
-        CMD=tox
+        CMD="tox"
         run_count="all"
         ;;
     "--help")
@@ -48,7 +48,9 @@ esac
 
 pwd
 echo "Show dir contents of molecule.d/"
-ls -lsa $MOLECULE_CONF_DIR
+ls -Rlsa $MOLECULE_CONF_DIR
+
+echo "Shell: $SHELL"
 
 if [[ "$run_count" == "single" ]]; then
     ln -s ${config/://} molecule.yml
