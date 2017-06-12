@@ -10,14 +10,14 @@ services:
   - docker
 
 before_install:
-  - docker pull ubuntu:16.04
+  - docker pull $distro
   - sudo useradd -m ubuntu
 
 install:
   - pip install tox-travis
 
 script:
-  - scripts/ci-test --all
+  - scripts/ci-test ${distro/://}   #  Replaces ':' by a '/'
 
 notifications:
   slack:
