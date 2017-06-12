@@ -39,6 +39,9 @@ case $1 in
         ;;
 esac
 
+
+pwd
+
 for platform in $MOLECULE_CONF_DIR/*; do
     for config in $platform/*; do
         ln -sf $config molecule.yml
