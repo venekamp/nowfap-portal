@@ -23,4 +23,5 @@ eduPersonSchema_url: https://spaces.internet2.edu/download/attachments/2309/{{ e
 
 ldapPublicKey: openssh-lpk-openldap
 ldapPublicKey_ldif: openssh-lpk-openldap.ldif
+ldapPublicKey_schema: openssh-lpk-openldap.schema
 ldapPublicKeySchema_url: https://raw.githubusercontent.com/AndriiGrytsenko/openssh-ldap-publickey/master/misc/openssh-lpk-openldap.schema

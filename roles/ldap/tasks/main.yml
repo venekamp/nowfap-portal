@@ -54,9 +54,9 @@
 - name: Convert schema to ldif format
   become_user: "{{ ansible_user }}"
   become: True
-  command: "{{ bin_dir }}/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema"
+  command: "{{ bin_dir }}/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey_schema }}"
   args:
-    creates: "{{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema"
+    creates: "{{ ldap_schema_dir }}/{{ ldapPublicKey_ldif }}"
 
 # Of course the unarchive module should be used here, but the things is,
 # it seems broken in 2.2.0, although it should be fixed in 2.1.1. I guess
