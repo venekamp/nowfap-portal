@@ -31,6 +31,6 @@ molecule:
   ignore_paths:
     - .tox
     - .molecule
-
+    - inventories
 
 # vim: tw=2:sw=2
