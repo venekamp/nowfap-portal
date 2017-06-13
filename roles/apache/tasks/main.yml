@@ -1,6 +1,7 @@
 ---
 # playbook to install and configure general components of a Comanage machine
-- include_vars: "apache.yml"
+- name: Include variables
+  include_vars: apache.yml
 
 #Uncomment for active php-fpm
 #- name: disable apache module
@@ -38,11 +39,15 @@
 - name: Eneable COmanage site
   command: a2ensite default
   become: yes
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Enable config COmanage configuration
   command: a2enconf {{ item }}
   with_items: "{{ apache_enable_conf }}"
   become: yes
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Restart Apache and related services
   service:

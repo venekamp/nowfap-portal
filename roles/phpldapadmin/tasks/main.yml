@@ -1,5 +1,6 @@
 ---
-- include_vars: "phpldapadmin.yml"
+- name: Include variables
+  include_vars: "phpldapadmin.yml"
 
 - name: Setting phpldapadmin configuration
   template:

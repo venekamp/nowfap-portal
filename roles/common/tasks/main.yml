@@ -1,6 +1,14 @@
 ---
-- include_vars: "packages.yml"
-- include_vars: "repositories.yml"
+
+- name: Include packages
+  include_vars: "{{ item }}.yml"
+  with_items:
+    - packages
+    - repositories
+
+- name: Make sure ubuntu users exists
+  user:
+    name: ubuntu
 
 #Command for switch from apache2_handler to php-fpm
 #- name: Remove a repo
@@ -9,6 +17,14 @@
 #    state: present
 #    update_cache: no
 #  with_items: removerepository
+
+- name: Reinstall certificates
+  apt:
+    name: ca-certificates
+    state: latest
+  tags:
+    # ansible-lint complains about state: latest and we do want this.
+    - skip_ansible_lint
 
 # Add an apt key for the ppas by id from a keyserver
 - name: Add ppa repository keys
@@ -22,13 +38,13 @@
   with_items: "{{ repositories }}"
   become: Yes
 
-- name: perform apt-get update
+- name: Perform apt-get update
   apt:
     update_cache: yes
     cache_valid_time: 360
   become: Yes
 
-- name: ensure that packages are installed
+- name: Ensure that packages are installed
   apt:
     name: "{{ item }}"
     state: present
@@ -40,4 +56,3 @@
 #    name: "{{ item }}"
 #    state: present
 #  with_items: packagesfastcgi
-

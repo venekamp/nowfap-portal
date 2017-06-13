@@ -1,5 +1,6 @@
 ---
-- include_vars: "ldap.yml"
+- name: Include variables
+  include_vars: "ldap.yml"
   tags: always
 
 - name: perform apt-get update
@@ -17,6 +18,7 @@
 
 - name: Ensure the a number of directories exist
   become_user: "{{ ansible_user }}"
+  become: True
   file:
     path: "{{ item }}"
     state: directory
@@ -29,6 +31,7 @@
 
 - name: Copy schema2ldif
   become_user: "{{ ansible_user }}"
+  become: True
   copy:
     src: roles/ldap/files/schema2ldif
     dest: "{{ bin_dir }}/"
@@ -50,7 +53,10 @@
 
 - name: Convert schema to ldif format
   become_user: "{{ ansible_user }}"
-  command: "{{ bin_dir }}/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey }}.schema"
+  become: True
+  command: "{{ bin_dir }}/schema2ldif {{ ldap_schema_dir }}/{{ ldapPublicKey_schema }}"
+  args:
+    creates: "{{ ldap_schema_dir }}/{{ ldapPublicKey_ldif }}"
 
 # Of course the unarchive module should be used here, but the things is,
 # it seems broken in 2.2.0, although it should be fixed in 2.1.1. I guess
@@ -59,6 +65,10 @@
   become_user: "{{ ansible_user }}"
   become: True
   command: unzip -o {{ downloads_dir }}/{{ eduPersonSchema_zip }} -d /tmp
+  args:
+    creates: "/tmp/{{ eduPersonSchema_ldif }}"
+  tags:
+    - skip_ansible_lint
 
 # OpenLDAP does not like adding exisiting entries again. Only add the
 # schema if it has not been added already. This does not yet take care
@@ -74,6 +84,8 @@
   failed_when: not [0, 1]
   register:
     eduPersonSchemaPresent
+  tags:
+    - skip_ansible_lint   # Suppres ansible-lint warning [ANSIBLE0012]
 
 # Based on the success or failure of copying the eduPerson schema add
 # the schema to the ldap database. Copying the same file in the previous
@@ -81,22 +93,30 @@
 - name: Ensure the eduPerson schema is added to LDAP
   command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f {{ ldap_schema_dir }}/{{ eduPersonSchema_ldif }}
   when: eduPersonSchemaPresent.stdout == ""
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Check if the ldapPublicKey schema is already present
   shell: ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b 'cn=schema,cn=config' '(cn=*)' dn | grep 'cn={[0-9]\+}openssh-lpk-openldap,cn=schema,cn=config'
   failed_when: not [0, 1]
   register:
     ldapPublicKey
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Ensure the ldapPublicKey schema is added to LDAP
   command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -D "cn=config" -f "{{ ldap_schema_dir }}/{{ ldapPublicKey_ldif }}"
   when: ldapPublicKey.stdout == ""
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Generating password hash for LDAP admin
   command:
     slappasswd -h {SSHA} -s {{ ldap_admin_passwd }}
   register:
     ldap_root_hash
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Generate ldif from template
   become_user: "{{ ansible_user }}"
@@ -115,12 +135,16 @@
 
 - name: Ensure the ldap admin credentials are set
   command: ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f {{ ldif_dir }}/set_root_credentials.ldif
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Check if DIT has been created before
   command:
     ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b "{{ ldap_basedn }}" "(ou=group)" dn
   register: emptyDIT
   failed_when: "emptyDIT.rc not in [0, 32]"
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Initialize DIT
   become_user: "{{ ansible_user }}"
@@ -129,5 +153,6 @@
     ldapadd -c -x -D cn={{ ldap_admin }},{{ ldap_basedn }} -w {{ ldap_admin_passwd }} -f {{ ldif_dir }}/initial_setup.ldif
   register: result
   failed_when: "(result.rc not in [0, 68])"
-  tags: ldap
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
   when: emptyDIT.stdout == ""

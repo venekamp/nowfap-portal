@@ -21,6 +21,8 @@ packages:
   - python-certbot-apache
   - python-mysqldb
   - software-properties-common
+  - dnsutils
+  - cron
 
 packagesfastcgi:
   - libapache2-mod-fastcgi

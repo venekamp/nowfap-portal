@@ -1,6 +1,7 @@
 ---
 
-- include_vars: sshd.yml
+- name: Include variables
+  include_vars: sshd.yml
 
 - name: Perform apt-get update
   apt:
