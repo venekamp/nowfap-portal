@@ -14,7 +14,7 @@ before_install:
   - sudo useradd -m ubuntu
 
 install:
-  - pip install molecule tox-travis
+  - pip install tox-travis
 
 script:
   - scripts/ci-test $distro
