@@ -55,7 +55,7 @@ echo "Shell: $SHELL"
 echo "config: $config"
 
 if [[ "$run_count" == "single" ]]; then
-    ln -sf $MOLECULE_CONF_DIR/${config/://} /home/travis/build/venekamp/nowfap-portal/molecule.yml
+    ln -sf $MOLECULE_CONF_DIR/${config/://}.yml /home/travis/build/venekamp/nowfap-portal/molecule.yml
     ls -l /home/travis/build/venekamp/nowfap-portal/
     $CMD
 else
