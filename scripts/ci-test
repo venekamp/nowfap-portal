@@ -55,7 +55,7 @@ echo "Shell: $SHELL"
 echo "config: $config"
 
 if [[ "$run_count" == "single" ]]; then
-    echo ln -s $MOLECULE_CONF_DIR/${config/://} molecule.yml
+    ln -s $MOLECULE_CONF_DIR/${config/://} molecule.yml
     $CMD
 else
     for platform in $MOLECULE_CONF_DIR/*; do
