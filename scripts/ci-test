@@ -46,24 +46,19 @@ case $1 in
         ;;
 esac
 
-
-pwd
-echo "Show dir contents of molecule.d/"
-ls -Rlsa $MOLECULE_CONF_DIR
-
-echo "Shell: $SHELL"
-echo "config: $config"
+MOLECULE_CONFIG=molecule.yml
 
 if [[ "$run_count" == "single" ]]; then
-    ln -sf $MOLECULE_CONF_DIR/${config/://}.yml /home/travis/build/venekamp/nowfap-portal/molecule.yml
-    ls -l /home/travis/build/venekamp/nowfap-portal/
+    MOLECULE_SRC_CONFIG=$MOLECULE_CONF_DIR/${config://}.yml
+    echo "Using config: $MOLECULE_SRC_CONFIG and linking to: $MOLECULE_CONFIG"
+    ln -sf $MOLECULE_SRC_CONFIG $MOLECULE_CONFIG
     $CMD
 else
     for platform in $MOLECULE_CONF_DIR/*; do
         echo "Platform: $platform"
         for config in $platform/*; do
-            echo "Config: $config"
-            ln -sf $config molecule.yml
+            echo "Using config: $config"
+            ln -sf $config MOLECULE_CONFIG
             $CMD
         done
     done
