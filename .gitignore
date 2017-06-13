@@ -1,5 +1,18 @@
-.vagrant
-comanage.retry
-machines.txt
-inventories
+# General patterns to ignore
 *.log
+.vagrant
+.molecule
+.tox
+__pycache__
+
+# What root level files and/or directories should be ignored
+/comanage.retry
+/machines.txt
+/molecule.yml
+
+# Inventories should be ignored with the exception of
+# example and continious-integration directories
+!/inventories
+/inventories/*
+!/inventories/example
+!/inventories/continious-integration

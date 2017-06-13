@@ -1,0 +1,20 @@
+---
+driver:
+  name: docker
+docker:
+  containers:
+    - name: common
+      image: ubuntu
+      image_version: latest
+      ansible_groups:
+        - group1
+verifier:
+  name: testinfra
+
+ansible:
+  playbook: test-playbook.yml
+
+molecule:
+  ignore_paths:
+    - .tox
+    - .molecule

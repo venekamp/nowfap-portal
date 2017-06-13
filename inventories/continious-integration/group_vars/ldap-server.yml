@@ -1,0 +1,9 @@
+---
+
+ldap_admin: admin
+ldap_admin_passwd: ChangeThisSecret
+ldap_basedn: dc=ldap,dc=example,dc=org
+ldap_rootdn: "cn={{ ldap_admin }},{{ ldap_basedn }}"
+
+organisation: example-acme
+
