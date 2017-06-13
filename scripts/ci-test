@@ -49,7 +49,7 @@ esac
 MOLECULE_CONFIG=molecule.yml
 
 if [[ "$run_count" == "single" ]]; then
-    MOLECULE_SRC_CONFIG=$MOLECULE_CONF_DIR/${config://}.yml
+    MOLECULE_SRC_CONFIG=$MOLECULE_CONF_DIR/${config/://}.yml
     echo "Using config: $MOLECULE_SRC_CONFIG and linking to: $MOLECULE_CONFIG"
     ln -sf $MOLECULE_SRC_CONFIG $MOLECULE_CONFIG
     $CMD
