@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 MOLECULE_CONF_DIR=molecule.d
 CMD="molecule test"
 
@@ -57,7 +59,7 @@ else
         echo "Platform: $platform"
         for config in $platform/*; do
             echo "Using config: $config"
-            ln -sf $config MOLECULE_CONFIG
+            ln -sf $config $MOLECULE_CONFIG
             $CMD
         done
     done
