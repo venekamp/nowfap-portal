@@ -40,7 +40,6 @@ case $1 in
         exit 0
         ;;
     *)
-        echo "single!"
         CMD="tox"
         config="$1"
         ;;
