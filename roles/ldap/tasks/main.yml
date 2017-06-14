@@ -3,12 +3,6 @@
   include_vars: "ldap.yml"
   tags: always
 
-- name: perform apt-get update
-  apt:
-    update_cache: yes
-    cache_valid_time: 360
-  become: Yes
-
 - name: Ensure that packages are installed
   apt:
     name: "{{ item }}"
