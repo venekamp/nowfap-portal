@@ -3,6 +3,13 @@
   include_vars: "ldap.yml"
   tags: always
 
+- name: Ensure that packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages  }}"
+  become: Yes
+
 - name: Ensure the a number of directories exist
   become_user: "{{ ansible_user }}"
   become: True
