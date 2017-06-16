@@ -14,6 +14,7 @@ SAML response.
 <!-- vim-markdown-toc GFM -->
 * [Ansible playbooks and roles to install COmanage virtual machine.](#ansible-playbooks-and-roles-to-install-comanage-virtual-machine)
     * [Example inventory](#example-inventory)
+        * [Supported CAs for automatic certificate generation](#supported-cas-for-automatic-certificate-generation)
         * [Example of group_vars](#example-of-group_vars)
 * [Roles](#roles)
 * [Certificates](#certificates)
@@ -36,7 +37,7 @@ with sudo powers and the root user should have passwordless access to MySQL.
 
 Machines are provisioned as follows:
 
-```
+```bash
 ansible-playbook -i <local_inventory> comanage.yml
 ```
 
@@ -46,7 +47,7 @@ able to create your own. In the repository you'll find and example
 inventory. See the `inventory` directory. The with this example
 inventory, the above command will become:
 
-```
+```bash
 ansible-playbook -i inventories/example/hosts comanage.yml
 ```
 
@@ -63,7 +64,7 @@ parts:
    convenient to have).
 
 A typical host file would look like:
-```
+```ini
 [portal]
 portal.example.org  ansible_user=ansible
 
@@ -86,26 +87,38 @@ server
 Together with the above hosts file, `group_vars` are created as well.
 Below an example of the group variables is given:
 
+### Supported CAs for automatic certificate generation
+The certificate roles is able to generate certificate having different
+CAs as root.  Which CA must be used depends on the value of
+`certficicate_ca`. The below table shows the supported CAs and the
+corresponding value for `certificate_ca`.
+
+| certificate_ca | Value       |
+| -------------- | ----------- |
+| Self signed    | self-signed |
+| Let's Encrypt  | letsencrypt |
+
 ### Example of group_vars
 Inside the `group_vars` directory a number of group files can be found:
 
 1. **portal.yml**
-   ```
+   ```yaml
    ---
 
+   certificate_ca: "self-signed"
    certificate: /etc/ssl/certs/portal.example.org.pem
    certificate_key: /etc/ssl/private/portal.examaple.org.key
 
    sp_hostname: portal.example.org
    ```
 2. **ldap.yml**
-   ```
+   ```yaml
    ---
 
    ldap_server: ldap://ldap.example.org
    ```
 3. **ldap-server.yml**
-   ```
+   ```yaml
    ---
 
    ldap_admin: admin
@@ -116,7 +129,7 @@ Inside the `group_vars` directory a number of group files can be found:
    organisation: Example
    ```
 4. **ssh-access.yml**
-   ```
+   ```yaml
    ---
 
    ldap_admin_passwd: BigSecret

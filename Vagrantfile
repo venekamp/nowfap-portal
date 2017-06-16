@@ -138,6 +138,7 @@ Vagrant.configure("2") do |config|
                 "email_contact" => "#{email}",
                 "organisation" => "#{organisation}",
                 "subject" => "#{subject}",
+                "certificate_ca" => "self-signed",
                 "cert_days_valid" => "#{ssl_cert_days_valid}",
                 "cert_key_dest" => "/etc/ssl/private/#{fqdn_name}.key",
                 "cert_dest" => "/etc/ssl/certs/#{fqdn_name}.pem"

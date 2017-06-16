@@ -13,6 +13,7 @@ email_contact: "john.doe@example.org"
 organisation: "Example.com Ltd."
 subject: "/C=NL/ST=North-Holland/L=Amsterdam/O=IT/CN={{ sp_hostname }}"
 cert_days_valid: 365
+certificate_ca: "self-signed"
 cert_key_dest: "/etc/ssl/private/{{ sp_hostname }}.key"
 cert_dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"
 
