@@ -28,7 +28,9 @@
 
 # Add an apt key for the ppas by id from a keyserver
 - name: Add ppa repository keys
-  apt_key: keyserver=keyserver.ubuntu.com id=14AA40EC0831756756D7F66C4F4EA0AAE5267A6C
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C
   become: Yes
 
 - name: Ensure all necessary reposirories are present

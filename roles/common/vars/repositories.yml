@@ -1,12 +1,12 @@
 ---
 removerepository:
-  - deb http://security.debian.org/ jessie/updates main contrib non-free
-  - deb-src http://security.debian.org/ jessie/updates main contrib non-free
+  - >
+    deb http://security.debian.org/ jessie/updates
+    main contrib non-free
+  - >
+    deb-src http://security.debian.org/
+    jessie/updates main contrib non-free
 
 repositories:
   - deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
   - ppa:certbot/certbot
-    #  - deb http://ftp.es.debian.org/debian stable main contrib non-free
-    #  - deb-src http://ftp.es.debian.org/debian stable main contrib non-free
-    #  - deb http://ftp.debian.org/debian/ jessie-updates main contrib non-free
-    #  - deb-src http://ftp.debian.org/debian/ jessie-updates main contrib non-free

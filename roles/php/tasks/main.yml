@@ -1,5 +1,6 @@
 ---
-# playbook to install and configure general components of a Comanage machine
+# playbook to install and configure general components of a COmanage
+# machine
 
 #- name: Check php software
 #  service:

@@ -11,14 +11,25 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   with_items:
-    - { path: "/home/ubuntu/comanage/src", state: directory, owner: "ubuntu", group: "ubuntu", mode: "0755" }
-    - { path: "/var/www/html", state: directory, owner: "root", group: "www-data", mode: "0775" }
+    - { path: "/home/ubuntu/comanage/src",
+        state: directory,
+        owner: "ubuntu",
+        group: "ubuntu",
+        mode: "0755"
+      }
+    - { path: "/var/www/html",
+        state: directory,
+        owner: "root",
+        group: "www-data",
+        mode: "0775"
+      }
 
 - name: Download comanage source
   become_user: ubuntu
   become: True
   get_url:
-    url: "https://github.com/Internet2/comanage-registry/archive/{{ comanage_version }}.tar.gz"
+    url: "https://github.com/Internet2/comanage-registry/archive/\
+          {{ comanage_version }}.tar.gz"
     dest: "/home/ubuntu/comanage/src/{{ comanage_version }}.tar.gz"
   register: comanage_downloaded
 
@@ -31,7 +42,9 @@
     copy: no
   when: comanage_downloaded|changed
   tags:
-    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0016]. Task cannot be turned into a handler
+    # Suppress ansible-lint warning [ANSIBLE0016].
+    # Task cannot be turned into a handler
+    - skip_ansible_lint
 
 - name: Symlink comanage source
   file:
@@ -87,7 +100,9 @@
   register: registry_database_stat
 
 - name: Copy database config
-  command: cp {{ registry_path }}/app/Config/database.php.default {{ registry_path }}/local/Config/database.php
+  command: >
+    cp {{ registry_path }}/app/Config/database.php.default
+       {{ registry_path }}/local/Config/database.php
   when: registry_database_stat.stat.exists == false
 
 - name: Configure database connection info
@@ -109,7 +124,9 @@
   register: registry_email_stat
 
 - name: Copy email config
-  command: cp {{ registry_path }}/app/Config/email.php.default {{ registry_path }}/local/Config/email.php
+  command: >
+    cp {{ registry_path }}/app/Config/email.php.default
+       {{ registry_path }}/local/Config/email.php
   when: registry_email_stat.stat.exists == false
 
 - name: Configure database connection info
@@ -120,13 +137,20 @@
   with_items: "{{ infodb }}"
 
 - name: Check for {{ registry_users_table }} in {{ registry_db }}
-  command: mysql -Nse 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = "{{ registry_db }}" AND table_name = "{{ registry_users_table }}"';
+  command: >
+    mysql -Nse 'SELECT COUNT(*) FROM information_schema.tables WHERE
+    table_schema = "{{ registry_db }}" AND
+    table_name = "{{ registry_users_table }}"';
   register: registery_cm_users_table_exists
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Setup Cake for login
-  command: ./Console/cake setup --admin-given-name "{{ admin_given_name }}" --admin-family-name "{{ admin_family_name }} " --admin-username "{{ admin_username }}" --enable-pooling="{{ enable_pooling }}"
+  command: >
+    ./Console/cake setup --admin-given-name "{{ admin_given_name }}"
+    --admin-family-name "{{ admin_family_name }} "
+    --admin-username "{{ admin_username }}"
+    --enable-pooling="{{ enable_pooling }}"
   args:
     chdir: "{{ registry_path }}/app"
   when: registery_cm_users_table_exists.stdout == "0"

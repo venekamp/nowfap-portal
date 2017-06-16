@@ -1,13 +1,7 @@
 ---
-#comanage_version: 1.0.6
-#comanage_version: develop
-
 registry_path: "/var/www/html/registry"
 
 www_user: "www-data"
-#admin_given_name: "Ubuntu"
-#admin_family_name: "Ubuntu 16-04"
-#admin_username: "ubuntu@localhost"
 admin_given_name: "John"
 admin_family_name: "Doe"
 admin_username: "j.doe@example.com"
@@ -15,11 +9,7 @@ enable_pooling: "Yes"
 registry_db: "registry"
 registry_users_table: "cm_users"
 
-
 replace:
-#  -
-#   regexp: "'datasource' => 'Database/Mysql'"
-#   replace: "'datasource' => 'Database/Postgres'"
   -
    regexp: "'login' => 'user'"
    replace: "'login' => 'comanage'"
@@ -36,4 +26,7 @@ infodb:
    replace: "admin@example.it"
 
 comanage_templates:
-  - { src: apache2-comanage.conf.j2, dest: /etc/apache2/conf-available/apache2-comanage.conf }
+  - {
+      src: apache2-comanage.conf.j2,
+      dest: /etc/apache2/conf-available/apache2-comanage.conf
+    }
