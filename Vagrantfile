@@ -124,8 +124,6 @@ Vagrant.configure("2") do |config|
                 "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}"
             },
             "comanage-portal:vars" => {
-                "certificate" => "/etc/ssl/certs/#{fqdn_name}.pem",
-                "certificate_key" => "/etc/ssl/private/#{fqdn_name}.key",
                 "sp_hostname" => "#{machineIP[hostname_portal]}",
                 "sp_protocol" => "https://",
                 "sp_path" => "/registry/auth/sp",
@@ -137,12 +135,20 @@ Vagrant.configure("2") do |config|
                 "surname" => "#{surname}",
                 "email_contact" => "#{email}",
                 "organisation" => "#{organisation}",
-                "subject" => "#{subject}",
+                "certificate_subject" => "#{subject}",
                 "certificate_ca" => "self-signed",
-                "cert_days_valid" => "#{ssl_cert_days_valid}",
-                "cert_key_dest" => "/etc/ssl/private/#{fqdn_name}.key",
-                "cert_dest" => "/etc/ssl/certs/#{fqdn_name}.pem"
+                "certificate_days_valid" => "#{ssl_cert_days_valid}",
+                "certificate_key_dest" => "/etc/ssl/private/#{fqdn_name}.key",
+                "certificate_dest" => "/etc/ssl/certs/#{fqdn_name}.pem"
             },
+            "ldap-server:vars" => {
+                "certificate_subject" => "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{fqdn_name}",
+                "certificate_dest" => "/etc/ssl/certs/ldap.pem",
+                "certificate_key_dest" => "/etc/ssl/private/ldap.key",
+                "certificate_days_valid" => 365,
+                "organisation" => "#{organisation}",
+                "email_contact" => "#{email}"
+            }
         }
     end
 end

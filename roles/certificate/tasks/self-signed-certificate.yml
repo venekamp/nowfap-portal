@@ -2,8 +2,9 @@
 
 - name: Ensure a self signed certificate is present
   command: >
-    openssl req -x509 -new -nodes -subj {{ subject }}
-    -days {{ cert_days_valid }} -keyout {{ cert_key_dest }}
-    -out {{ cert_dest }}
+    openssl req -x509 -new -nodes -subj {{ certificate_subject }}
+    -days {{ certificate_days_valid }}
+    -keyout {{ certificate_key_dest }}
+    -out {{ certificate_dest }}
   args:
-    creates: "{{ cert_key_dest }}"
+    creates: "{{ certificate_key_dest }}"
