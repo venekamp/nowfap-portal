@@ -1,12 +1,12 @@
 ---
 
-- name: Get PATH info
-  command: echo $PATH
+- name: Check if Travis-CI is able to execute certtool
+  command: certtool --version
   register: result
   tags:
     - skip_ansible_lint
 
-- name: Show PATH contents
+- name: Show certtool version
   debug:
     var: result
 
