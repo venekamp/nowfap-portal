@@ -1,20 +1,28 @@
 ---
+#domain_name: example.org
 sp_protocol: https://
-sp_hostname: portal.example.org
+sp_hostname: portal.{{ domain_name }}
 sp_path: registry/auth/sp
 
-certificate: "/etc/ssl/certs/{{ sp_hostname }}.pem"
-certificate_key: "/etc/ssl/private/{{ sp_hostname }}.key"
+hostname: "{{ sp_hostname }}"
 
-comanage_version: "develop"
+certificate_ca: "self-signed"
+#ca_path: ca
+#ca_password: "Chang3me3!"
+#ca_path_domain: "{{ ca_path }}/{{ sp_hostname }}"
+
+comanage_version: "2.0.0"
 given_name: "John"
 surname: "Doe"
 email_contact: "john.doe@example.org"
 organisation: "Example.com Ltd."
-subject: "/C=NL/ST=North-Holland/L=Amsterdam/O=IT/CN={{ sp_hostname }}"
-cert_days_valid: 365
-cert_key_dest: "/etc/ssl/private/{{ sp_hostname }}.key"
-cert_dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"
+certificate_subject: "/C=NL/ST=North-Holland/L=Amsterdam/O=IT/CN={{ sp_hostname }}"
+certificate_days_valid: 365
+certificate_key_dest: "/etc/ssl/private/{{ sp_hostname }}.key"
+certificate_dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"
+#ca_certs_path: "{{ ca_path_domain }}/certs"
+#ca_private_path: "{{ ca_path_domain }}/private"
+#ca_templates_path: "{{ ca_path_domain }}/templates"
 
-service_description: Example servie descrption
-service_display_name: Example service name
+service_description: Temporarily SP during continuous integration
+service_display_name: Temporarily SP

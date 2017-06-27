@@ -40,6 +40,11 @@ ssl_cert_days_valid = 365
 ldap_admin          = "admin"
 ldap_passwd         = "Please-change-me!"
 
+# Where the CA, in case of self singed certificates, stores its
+# certificates and configuration files.
+ca_path = "ca"
+ca_path_domain = "#{ca_path}/#{domain}"
+
 #####
 #
 #  No need to change anything below these lines.
@@ -49,7 +54,7 @@ ldap_passwd         = "Please-change-me!"
 machinesNames       = Array[hostname_portal, hostname_ldap, hostname_ssh]
 fqdn_name           = "#{machinesNames[0]}.#{domain}"
 ldap_fqdn_name      = "#{machinesNames[1]}.#{domain}"
-subject             = "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{fqdn_name}"
+subject             = "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{ldap_fqdn_name}"
 
 #  Construct the ldap_basedn based on the domain variable.
 ldap_basedn = ""
@@ -116,6 +121,7 @@ Vagrant.configure("2") do |config|
             "phpldapadmin" => ["#{machinesNames[0]}"],
 
             "all:vars" => {
+                "domain_name" => "#{domain}",
                 "ldap_server" => "#{ldap_fqdn_name}",
                 "organisation" => "#{organisation}",
                 "ldap_admin" => "#{ldap_admin}",
@@ -124,8 +130,6 @@ Vagrant.configure("2") do |config|
                 "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}"
             },
             "comanage-portal:vars" => {
-                "certificate" => "/etc/ssl/certs/#{fqdn_name}.pem",
-                "certificate_key" => "/etc/ssl/private/#{fqdn_name}.key",
                 "sp_hostname" => "#{machineIP[hostname_portal]}",
                 "sp_protocol" => "https://",
                 "sp_path" => "/registry/auth/sp",
@@ -137,11 +141,24 @@ Vagrant.configure("2") do |config|
                 "surname" => "#{surname}",
                 "email_contact" => "#{email}",
                 "organisation" => "#{organisation}",
-                "subject" => "#{subject}",
-                "cert_days_valid" => "#{ssl_cert_days_valid}",
-                "cert_key_dest" => "/etc/ssl/private/#{fqdn_name}.key",
-                "cert_dest" => "/etc/ssl/certs/#{fqdn_name}.pem"
+                "certificate_subject" => "#{subject}",
+                "certificate_ca" => "self-signed",
+                "certificate_days_valid" => "#{ssl_cert_days_valid}",
+                "certificate_key_dest" => "/etc/ssl/private/#{fqdn_name}.key",
+                "certificate_dest" => "/etc/ssl/certs/#{fqdn_name}.pem"
             },
+            "ldap-server:vars" => {
+                "certificate_ca" => "self-signed",
+                "certificate_subject" => "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{fqdn_name}",
+                "certificate_dest" => "/etc/ldap/ldap-server.pem",
+                "certificate_key_dest" => "/etc/ldap/ldap-server.key",
+                "certificate_days_valid" => 365,
+                "organisation" => "#{organisation}",
+                "email_contact" => "#{email}",
+                "ca_certs_path" => "#{ca_path_domain}/certs",
+                "ca_private_path" => "#{ca_path_domain}/private",
+                "ca_templates_path" => "#{ca_path_domain}/templates",
+            }
         }
     end
 end

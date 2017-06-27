@@ -1,0 +1,20 @@
+---
+
+- name: Create a private key for {{ hostname }}
+  command: >
+    certtool -p --sec-param high
+             --outfile {{ ca_private_path }}/{{ hostname }}.key
+  args:
+    creates:
+      "{{ ca_private_path }}/{{ hostname }}.key"
+
+- name: Generate certificate for {{ hostname }}
+  command: >
+    certtool -c
+    --load-privkey {{ ca_private_path }}/{{ hostname }}.key
+    --load-ca-certificate {{ ca_certs_path }}/{{ domain_name }}.pem
+    --load-ca-privkey {{ ca_private_path }}/{{ domain_name }}.key
+    --template {{ ca_templates_path }}/{{ hostname  }}.conf
+    --outfile {{ ca_certs_path }}/{{ hostname }}.pem
+  args:
+    creates: "{{ ca_certs_path }}/{{ hostname }}.pem"

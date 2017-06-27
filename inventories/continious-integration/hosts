@@ -4,8 +4,8 @@ comanage ansible_connection=docker
 [ldap]
 comanage
 
-[phpldapadmin]
+[portal]
 comanage
 
-[portal]
+[phpldapadmin]
 comanage
