@@ -1,5 +1,15 @@
 ---
 
+- name: Get PATH info
+  command: echo $PATH
+  register: result
+  tags:
+    - skip_ansible_lint
+
+- name: Show PATH contents
+  debug:
+    var: result
+
 - name: Ensure directories exists
   file:
     name: "{{ item }}"
