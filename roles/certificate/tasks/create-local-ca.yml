@@ -1,0 +1,78 @@
+---
+
+- name: set fact
+  set_fact:
+    certtool: /usr/local/opt/gnutls/bin/gnutls-certtool
+
+- name: debug
+  debug:
+    var: certtool
+
+- name: Ensure directories exists
+  file:
+    name: "{{ item }}"
+    mode: 0750
+    state: directory
+  with_items:
+    - "{{ ca_certs_path }}"
+    - "{{ ca_private_path }}"
+    - "{{ ca_templates_path }}"
+
+- name: Copy configuration files for self signed CA
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ ca_templates_path }}/{{ item }}"
+    mode: 0640
+  with_items:
+    - ca.conf
+    - "{{ hostname }}.conf"
+
+- name: Create private key for the CA
+  command: >
+    {{ certtool }} -p --outfile {{ ca_private_path }}/{{ domain_name }}.key
+  args:
+    creates: "{{ ca_private_path }}/{{ domain_name }}.key"
+
+- name: Create self signed certificate
+  command: >
+    {{ certtool }} -s
+    --load-privkey {{ ca_private_path }}/{{ domain_name }}.key
+    --template {{ ca_templates_path }}/ca.conf
+    --outfile {{ ca_certs_path }}/{{ domain_name }}.pem
+  args:
+    creates:
+      ca/{{ domain_name }}/certs/{{ domain_name }}.pem
+
+- name: Create self signed certificate
+  command: >
+    {{ certtool }} -s
+    --load-privkey {{ ca_private_path }}/{{ domain_name }}.key
+    --template {{ ca_templates_path }}/ca.conf
+    --outfile {{ ca_certs_path }}/{{ domain_name }}.pem
+  args:
+    creates:
+      "{{ ca_certs_path }}/{{ domain_name }}.pem"
+
+      #- name: Create a private key for the ldap server
+      #  command: >
+      #    {{ certtool }} -p --sec-param high
+      #             --outfile {{ ca_private_path }}/{{ ldap_server_name }}.key
+      #  args:
+      #    creates:
+      #      "{{ ca_private_path }}/{{ ldap_server_name }}.key"
+      #
+      #- name: Set read/write access of {{ ldap_server_name }}.key
+      #  file:
+      #    path: "{{ ca_private_path }}/{{ ldap_server_name }}.key"
+      #    mode: 0640
+      #
+      #- name: Generate certificate for the ldap server
+      #  command: >
+      #    {{ certtool }} -c
+      #    --load-privkey {{ ca_private_path }}/{{ ldap_server_name }}.key
+      #    --load-ca-certificate {{ ca_certs_path }}/{{ domain_name }}.pem
+      #    --load-ca-privkey {{ ca_private_path }}/{{ domain_name }}.key
+      #    --template {{ ca_templates_path }}/ldap_server.conf
+      #    --outfile {{ ca_certs_path }}/{{ ldap_server_name }}.pem
+      #  args:
+      #    creates: "{{ ca_certs_path }}/{{ ldap_server_name }}.pem"

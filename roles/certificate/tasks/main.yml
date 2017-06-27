@@ -1,9 +1,11 @@
 ---
 
-- include: "letsencrypt.yml"
+- name: Using Let's Encrypt as CA
+  include: "letsencrypt.yml"
   static: no
   when: certificate_ca == "letsencrypt"
 
-- include: "self-signed-certificate.yml"
+- name: Using your own CA for self signed certificates
+  include: "self-signed-certificate.yml"
   static: no
   when: certificate_ca == "self-signed"

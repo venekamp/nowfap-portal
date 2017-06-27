@@ -1,0 +1,10 @@
+---
+domain_name: example.org
+ca_path: ca
+ca_password: "Chang3me3!"
+ca_path_domain: "{{ ca_path }}/{{ domain_name }}"
+ca_certs_path: "{{ ca_path_domain }}/certs"
+ca_private_path: "{{ ca_path_domain }}/private"
+ca_templates_path: "{{ ca_path_domain }}/templates"
+
+ldap_server_name: ldap.{{ domain_name }}

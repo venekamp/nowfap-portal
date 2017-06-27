@@ -8,6 +8,7 @@ given_name: "John"
 surname: "Doe"
 email_contact: "john.doe@example.org"
 organisation: "Example.com Ltd."
+
 certificate_ca: "self-signed"
 certificate_subject: "/C=NL/ST=North-Holland/L=Amsterdam/O=IT/CN={{ sp_hostname }}"
 certificate_days_valid: 365

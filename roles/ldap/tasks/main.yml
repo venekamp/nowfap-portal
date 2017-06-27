@@ -135,6 +135,32 @@
   with_fileglob:
     - ../templates/*.ldif.j2
 
+- name: Create self-signed certificates
+  include_role:
+    name: certificate
+
+- name: Copy ldap pub key
+  copy:
+    src: "{{ ca_certs_path }}/{{ ldap_server }}.pem"
+    dest: /etc/ssl/certs/ldap.example.org.pem
+
+- name: Copy private key
+  copy:
+    src: "{{ ca_private_path }}/{{ ldap_server }}.key"
+    dest: /etc/ssl/private/ldap.example.org.key
+
+- name: Create new Diffie Hellman parameters (takes a long time...)
+  command: >
+    openssl genpkey -genparam -algorithm DH -out /etc/ldap/dhparam.pem
+            -pkeyopt dh_paramgen_prime_len:2048
+  args:
+    creates: /etc/ldap/dhparam.pem
+
+- name: Configure LDAP to access ldaps:// only
+  template:
+    src: slapd.j2
+    dest: /etc/default/slapd
+
 - name: Starting slapd service
   service:
     name: slapd
@@ -167,3 +193,15 @@
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
   when: emptyDIT.stdout == ""
+
+- name: Restart slapd
+  service:
+    name: slapd
+    state: restarted
+
+- name: Configure ldaps://
+  command:
+    ldapmodify -Q -Y EXTERNAL -H ldapi:///
+    -f {{ ldif_dir }}/add_certificate.ldif
+  tags:
+    - skip_ansible_lint

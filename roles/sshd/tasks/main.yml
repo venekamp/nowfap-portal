@@ -35,3 +35,23 @@
     mode: 0644
   notify:
     - Restart sshd
+
+- name: Configure LDAP client
+  template:
+    src: ldap.conf.j2
+    dest: /etc/ldap/ldap.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy the CA certificate
+  copy:
+    src: /etc/ssl/certs/example.org.pem
+    dest: /etc/ssl/certs/example.org.pem
+
+- name: Ensure the CA certificate is installed
+  become_user: root
+  become: True
+  command: update-ca-certifcates
+  tags:
+    - skip_ansible_lint

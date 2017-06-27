@@ -1,10 +1,53 @@
 ---
 
-- name: Ensure a self signed certificate is present
-  command: >
-    openssl req -x509 -new -nodes -subj {{ certificate_subject }}
-    -days {{ certificate_days_valid }}
-    -keyout {{ certificate_key_dest }}
-    -out {{ certificate_dest }}
-  args:
-    creates: "{{ certificate_key_dest }}"
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gnutls-bin
+    - ssl-cert
+
+- name: Setup local CA
+  include_role:
+    name: certificate
+    tasks_from: create-local-ca
+  delegate_to: localhost
+  delegate_facts: True
+  become: no
+
+- name: Copy ca certificate from origin
+  copy:
+    src: "{{ ca_certs_path }}/{{ domain_name }}.pem"
+    dest: /usr/local/share/ca-certificates/{{ domain_name }}.pem
+
+- name: Install ca certificate
+  become_user: root
+  become: True
+  command:
+    update-ca-certificates
+  tags:
+    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
+
+- name: Create certificate
+  include_role:
+    name: certificate
+    tasks_from: create-self-signed-certificate
+  delegate_to: localhost
+  delegate_facts: True
+  become: False
+
+- name: Copy certificate for {{ hostname }}
+  copy:
+    src: "{{ ca_certs_path }}/{{ hostname }}.pem"
+    dest: "{{ certificate_dest }}"
+
+- name: Copy private key for {{ hostname }}
+  copy:
+    src: "{{ ca_private_path }}/{{ hostname }}.key"
+    dest: "{{ certificate_key_dest }}"
+
+- name: Ensure openldap has access to private keys
+  user:
+    name: openldap
+    groups: ssl-cert
