@@ -1,12 +1,12 @@
 ---
 
-- name: Check if Travis-CI is able to execute certtool
-  command: certtool --version
+- name: Determine what is installed in /usr/bin/ on Travis-CI
+  command: ls -lsa /usr/bin/
   register: result
   tags:
     - skip_ansible_lint
 
-- name: Show certtool version
+- name: Show contents of /usr/bin/
   debug:
     var: result
 
