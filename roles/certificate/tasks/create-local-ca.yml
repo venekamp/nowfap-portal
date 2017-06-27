@@ -1,13 +1,5 @@
 ---
 
-- name: set fact
-  set_fact:
-    certtool: /usr/local/opt/gnutls/bin/gnutls-certtool
-
-- name: debug
-  debug:
-    var: certtool
-
 - name: Ensure directories exists
   file:
     name: "{{ item }}"
@@ -29,13 +21,13 @@
 
 - name: Create private key for the CA
   command: >
-    {{ certtool }} -p --outfile {{ ca_private_path }}/{{ domain_name }}.key
+    certtool -p --outfile {{ ca_private_path }}/{{ domain_name }}.key
   args:
     creates: "{{ ca_private_path }}/{{ domain_name }}.key"
 
 - name: Create self signed certificate
   command: >
-    {{ certtool }} -s
+    certtool -s
     --load-privkey {{ ca_private_path }}/{{ domain_name }}.key
     --template {{ ca_templates_path }}/ca.conf
     --outfile {{ ca_certs_path }}/{{ domain_name }}.pem
@@ -45,7 +37,7 @@
 
 - name: Create self signed certificate
   command: >
-    {{ certtool }} -s
+    certtool -s
     --load-privkey {{ ca_private_path }}/{{ domain_name }}.key
     --template {{ ca_templates_path }}/ca.conf
     --outfile {{ ca_certs_path }}/{{ domain_name }}.pem
