@@ -1,7 +1,7 @@
 [all]
 comanage ansible_connection=docker
 
-[ldap]
+[ldap-server]
 comanage
 
 [portal]
