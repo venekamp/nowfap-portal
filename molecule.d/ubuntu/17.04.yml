@@ -6,10 +6,10 @@ docker:
   containers:
     - name: comanage
       image: ubuntu
-      image_version: 17.04
+      image_version: '17.04'
       ansible_groups:
         - portal
-        - ldap
+        - ldap-server
         - phpldapadmin
 
 verifier:
@@ -17,7 +17,7 @@ verifier:
 
 ansible:
   playbook: comanage.yml
-  inventory_file: inventories/example/hosts
+  inventory_file: inventories/continious-integration/hosts
 
 molecule:
   test:
