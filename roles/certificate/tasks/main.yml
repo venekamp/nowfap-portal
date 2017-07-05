@@ -1,6 +1,6 @@
 ---
 
-- name: Using Let's Encrypt as CA
+- name: "Using Let's Encrypt as CA"
   include: "letsencrypt.yml"
   static: no
   when: certificate_ca == "letsencrypt"
