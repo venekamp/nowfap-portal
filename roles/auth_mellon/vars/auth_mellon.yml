@@ -1,7 +1,7 @@
 ---
 output_dir: "/home/ubuntu/auth_mellon"
 endpoint_url: "{{sp_protocol }}{{ sp_hostname }}/{{ sp_path }}"
-entity_id: "{{ endpoint_url }}/metadata{% if sp_random_part != '' %}-\
+entity_id: "{{ endpoint_url }}/metadata{% if sp_random_part is defined %}-\
             {{ sp_random_part }}{% endif %}"
 
 sp_files:
