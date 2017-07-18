@@ -8,3 +8,5 @@ ca_private_path: "{{ ca_path_domain }}/private"
 ca_templates_path: "{{ ca_path_domain }}/templates"
 
 ldap_server_name: ldap.{{ domain_name }}
+
+remote_user: ubuntu

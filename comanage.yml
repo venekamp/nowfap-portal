@@ -4,8 +4,8 @@
 
 - hosts:
   - portal
-    #  become_user: root
-    #  become: True
+  become_user: root
+  become: True
 
   roles:
     - { role: common,      tags: common      }

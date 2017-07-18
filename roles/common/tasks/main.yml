@@ -6,9 +6,9 @@
     - packages
     - repositories
 
-- name: Make sure ubuntu users exists
+- name: Make sure {{ remote_user }} user exists
   user:
-    name: ubuntu
+    name: "{{ remote_user }}"
 
 #Command for switch from apache2_handler to php-fpm
 #- name: Remove a repo

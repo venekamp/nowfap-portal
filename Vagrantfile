@@ -52,7 +52,7 @@ ca_path_domain = "#{ca_path}/#{domain}"
 #####
 
 machinesNames       = Array[hostname_portal, hostname_ldap, hostname_ssh]
-fqdn_name           = "#{machinesNames[0]}.#{domain}"
+portal_fqdn_name     = "#{machinesNames[0]}.#{domain}"
 ldap_fqdn_name      = "#{machinesNames[1]}.#{domain}"
 subject             = "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{ldap_fqdn_name}"
 
@@ -123,14 +123,21 @@ Vagrant.configure("2") do |config|
             "all:vars" => {
                 "domain_name" => "#{domain}",
                 "ldap_server" => "#{ldap_fqdn_name}",
+                "email_contact" => "#{email}",
                 "organisation" => "#{organisation}",
                 "ldap_admin" => "#{ldap_admin}",
                 "ldap_admin_passwd" => "#{ldap_passwd}",
                 "ldap_basedn" => "#{ldap_basedn}",
-                "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}"
+                "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}",
+                "remote_user" => "ubuntu",
+                "ca_password" => "Chang3me3!",
+                "ca_certs_path" => "#{ca_path_domain}/certs",
+                "ca_private_path" => "#{ca_path_domain}/private",
+                "ca_templates_path" => "#{ca_path_domain}/templates",
+                "ldap_server_name" => "#{ldap_fqdn_name}"
             },
             "comanage-portal:vars" => {
-                "sp_hostname" => "#{machineIP[hostname_portal]}",
+                "hostname" => "#{portal_fqdn_name}",
                 "sp_protocol" => "https://",
                 "sp_path" => "/registry/auth/sp",
                 "sp_random_part" => SecureRandom.uuid,
@@ -139,26 +146,20 @@ Vagrant.configure("2") do |config|
                 "comanage_version" => "#{comanage_version}",
                 "given_name" => "#{given_name}",
                 "surname" => "#{surname}",
-                "email_contact" => "#{email}",
-                "organisation" => "#{organisation}",
                 "certificate_subject" => "#{subject}",
                 "certificate_ca" => "self-signed",
                 "certificate_days_valid" => "#{ssl_cert_days_valid}",
-                "certificate_key_dest" => "/etc/ssl/private/#{fqdn_name}.key",
-                "certificate_dest" => "/etc/ssl/certs/#{fqdn_name}.pem"
+                "certificate_key_dest" => "/etc/ssl/private/#{portal_fqdn_name}.key",
+                "certificate_dest" => "/etc/ssl/certs/#{portal_fqdn_name}.pem"
             },
             "ldap-server:vars" => {
+                "hostname" => "#{ldap_fqdn_name}",
                 "certificate_ca" => "self-signed",
-                "certificate_subject" => "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{fqdn_name}",
+                "certificate_subject" => "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{portal_fqdn_name}",
                 "certificate_dest" => "/etc/ldap/ldap-server.pem",
                 "certificate_key_dest" => "/etc/ldap/ldap-server.key",
                 "certificate_days_valid" => 365,
-                "organisation" => "#{organisation}",
-                "email_contact" => "#{email}",
-                "ca_certs_path" => "#{ca_path_domain}/certs",
-                "ca_private_path" => "#{ca_path_domain}/private",
-                "ca_templates_path" => "#{ca_path_domain}/templates",
-            }
+           }
         }
     end
 end

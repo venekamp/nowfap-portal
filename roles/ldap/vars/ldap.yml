@@ -4,12 +4,12 @@ packages:
   - ldap-utils
   - unzip
 
-ansible_user_home: /home/{{ ansible_user }}
+remote_user_home: /home/{{ remote_user }}
 
-bin_dir:         "{{ ansible_user_home }}/bin"
-ldap_schema_dir: "{{ ansible_user_home }}/ldap_schemas"
-ldif_dir:        "{{ ansible_user_home }}/ldif"
-downloads_dir:   "{{ ansible_user_home }}/downloads"
+bin_dir:         "{{ remote_user_home }}/bin"
+ldap_schema_dir: "{{ remote_user_home }}/ldap_schemas"
+ldif_dir:        "{{ remote_user_home }}/ldif"
+downloads_dir:   "{{ remote_user_home }}/downloads"
 
 directories:
   - "{{ bin_dir }}"

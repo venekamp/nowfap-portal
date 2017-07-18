@@ -1,0 +1,3 @@
+[submodule "ca-scripts"]
+	path = ca-scripts
+	url = https://github.com/venekamp/ca-scripts
