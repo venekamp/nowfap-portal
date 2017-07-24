@@ -1,10 +1,5 @@
 ---
 
-- name: debug
-  debug:
-    var:
-      certificate_ca
-
 - name: Include variables
   include_vars: "letsencrypt.yml"
 
