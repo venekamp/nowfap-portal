@@ -2,10 +2,6 @@
 registry_path: "/var/www/html/registry"
 
 www_user: "www-data"
-admin_given_name: "John"
-admin_family_name: "Doe"
-admin_username: "j.doe@example.com"
-enable_pooling: "Yes"
 registry_db: "registry"
 registry_users_table: "cm_users"
 

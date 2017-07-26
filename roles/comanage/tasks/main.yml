@@ -147,10 +147,10 @@
 
 - name: Setup Cake for login
   command: >
-    ./Console/cake setup --admin-given-name "{{ admin_given_name }}"
-    --admin-family-name "{{ admin_family_name }} "
-    --admin-username "{{ admin_username }}"
-    --enable-pooling="{{ enable_pooling }}"
+    ./Console/cake setup --admin-given-name "{{ comanage_admin_given_name }}"
+    --admin-family-name "{{ comanage_admin_family_name }} "
+    --admin-username "{{ comanage_admin_username }}"
+    --enable-pooling="{{ comanage_enable_pooling }}"
   args:
     chdir: "{{ registry_path }}/app"
   when: registery_cm_users_table_exists.stdout == "0"
