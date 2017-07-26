@@ -7,6 +7,7 @@ __pycache__
 
 # What root level files and/or directories should be ignored
 /ca/
+/data/
 /comanage.retry
 /machines.txt
 /molecule.yml
