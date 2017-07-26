@@ -4,6 +4,11 @@
   include_vars:
     file: open_ports.yml
 
+- name: Make sure ufw is installed
+  apt:
+    name: ufw
+    state: present
+
 - name: Ensure https port open
   ufw:
     state: enabled

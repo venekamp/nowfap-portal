@@ -24,7 +24,6 @@ packages:
   - software-properties-common
   - dnsutils
   - cron
-  - ufw
   - zerotier-one
 
 packagesfastcgi:
