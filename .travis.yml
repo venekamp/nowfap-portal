@@ -12,7 +12,7 @@ services:
 before_install:
   - docker pull $distro
   - sudo useradd -m ubuntu
-  - sudo apt install gnutls-bin
+  - sudo apt install gnutls-bin ufw
 
 install:
   - pip install tox-travis
