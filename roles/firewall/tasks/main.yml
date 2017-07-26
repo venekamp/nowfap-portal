@@ -1,0 +1,13 @@
+---
+
+- name: include variables
+  include_vars:
+    file: open_ports.yml
+
+- name: Ensure https port open
+  ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  with_items: "{{ fw_ports }}"

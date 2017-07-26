@@ -8,6 +8,8 @@
   become: True
 
   roles:
+    - { role: firewall,    tags: firewall    }
+    - { role: restore,     tags: restore     }
     - { role: common,      tags: common      }
     - { role: certificate, tags: certificate }
     - { role: auth_mellon, tags: auth_mellon }

@@ -1,0 +1,35 @@
+---
+
+- name: Include backup file names
+  include_vars:
+    file: backup_files.yml
+
+- name: "Check if backup data for Let's Encrypt exits"
+  become: False
+  stat:
+    path: "{{ letsencrypt_backup }}"
+  delegate_to: localhost
+  register: stat_letsencrypt_backup
+
+- name: "Restore data: Let's encrypt"
+  unarchive:
+    src: "{{ letsencrypt_backup }}"
+    dest: /
+    remote_src: no
+    creates: letsencrypt.tar.bz2
+  when: stat_letsencrypt_backup.stat.exists == True
+
+- name: "Check if backup data for ZeroTier-One exits"
+  become: False
+  stat:
+    path: "{{ zerotier_backup }}"
+  delegate_to: localhost
+  register: stat_letsencrypt_backup
+
+- name: "Restore data: ZeroTier-One"
+  unarchive:
+    src: "{{ zerotier_backup }}"
+    dest: /
+    remote_src: no
+    creates: zerotier-one.tar.bz2
+  when: stat_letsencrypt_backup.stat.exists == True
