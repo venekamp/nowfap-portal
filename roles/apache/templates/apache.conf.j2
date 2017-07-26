@@ -41,8 +41,8 @@
         #   SSLCertificateFile directive is needed.
         #SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
         #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
-        SSLCertificateFile    {{ certificate }}
-        SSLCertificateKeyFile {{ certificate_key }}
+        SSLCertificateFile    /etc/ssl/certs/{{ sp_hostname }}.pem
+        SSLCertificateKeyFile /etc/ssl/private/{{ sp_hostname }}.key
 
         #   Server Certificate Chain:
         #   Point SSLCertificateChainFile at a file containing the
