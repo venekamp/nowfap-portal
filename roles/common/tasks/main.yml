@@ -58,3 +58,7 @@
 #    name: "{{ item }}"
 #    state: present
 #  with_items: packagesfastcgi
+
+- name: Set timezone
+  timezone:
+    name: Europe/Amsterdam
