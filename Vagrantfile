@@ -122,6 +122,7 @@ Vagrant.configure("2") do |config|
 
             "all:vars" => {
                 "domain_name" => "#{domain}",
+                "sp_hostname" => "#{portal_fqdn_name}",
                 "ldap_server" => "#{ldap_fqdn_name}",
                 "email_contact" => "#{email}",
                 "organisation" => "#{organisation}",
@@ -143,9 +144,13 @@ Vagrant.configure("2") do |config|
                 "sp_random_part" => SecureRandom.uuid,
                 "service_description" => "#{service_description}",
                 "service_display_name" => "#{display_name}",
-                "comanage_version" => "#{comanage_version}",
                 "given_name" => "#{given_name}",
                 "surname" => "#{surname}",
+                "comanage_version" => "#{comanage_version}",
+                "comanage_admin_given_name" => "#{given_name}",
+                "comanage_admin_family_name" => "#{surname}",
+                "comanage_admin_username" => "admin",
+                "comanage_enable_pooling" => "yes",
                 "certificate_subject" => "#{subject}",
                 "certificate_ca" => "self-signed",
                 "certificate_days_valid" => "#{ssl_cert_days_valid}",
