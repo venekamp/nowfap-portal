@@ -24,6 +24,7 @@ packages:
   - software-properties-common
   - dnsutils
   - cron
+  - rsync
   - zerotier-one
 
 packagesfastcgi:
