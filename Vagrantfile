@@ -112,6 +112,7 @@ Vagrant.configure("2") do |config|
     config.vm.provision "ansible_local" do |ansible|
         ansible.playbook = "comanage.yml"
         ansible.extra_vars = { ansible_user: 'ubuntu' }
+        ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
 
         ansible.groups = {
             "all" => ["#{machinesNames[0]}", "#{machinesNames[1]}", "#{machinesNames[2]}"],
