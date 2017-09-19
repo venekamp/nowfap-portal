@@ -9,7 +9,7 @@ require 'securerandom'
 #  Please change the below values to something that makes sense to you.
 #
 #####
-comanage_version    = "2.0.0"
+comanage_version    = "3.0.0-rc2"
 
 # Define the host name for each of the three VMs
 hostname_portal     = "portal"
@@ -42,8 +42,7 @@ ldap_passwd         = "Please-change-me!"
 
 # Where the CA, in case of self singed certificates, stores its
 # certificates and configuration files.
-ca_path = "ca"
-ca_path_domain = "#{ca_path}/#{domain}"
+cert_path = "ca/intermediate"
 
 #####
 #
@@ -52,7 +51,7 @@ ca_path_domain = "#{ca_path}/#{domain}"
 #####
 
 machinesNames       = Array[hostname_portal, hostname_ldap, hostname_ssh]
-portal_fqdn_name     = "#{machinesNames[0]}.#{domain}"
+portal_fqdn_name    = "#{machinesNames[0]}.#{domain}"
 ldap_fqdn_name      = "#{machinesNames[1]}.#{domain}"
 subject             = "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{ldap_fqdn_name}"
 
@@ -133,10 +132,9 @@ Vagrant.configure("2") do |config|
                 "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}",
                 "remote_user" => "ubuntu",
                 "ca_password" => "Chang3me3!",
-                "ca_certs_path" => "#{ca_path_domain}/certs",
-                "ca_private_path" => "#{ca_path_domain}/private",
-                "ca_templates_path" => "#{ca_path_domain}/templates",
-                "ldap_server_name" => "#{ldap_fqdn_name}"
+                "certs_path" => "#{cert_path}",
+                "ldap_server_name" => "#{ldap_fqdn_name}",
+                "data_dir" => "data"
             },
             "comanage-portal:vars" => {
                 "hostname" => "#{portal_fqdn_name}",
@@ -160,7 +158,10 @@ Vagrant.configure("2") do |config|
             },
             "ldap-server:vars" => {
                 "hostname" => "#{ldap_fqdn_name}",
-                "certificate_ca" => "self-signed",
+                "ldap_certificate_type" => "provided",
+                "ldap_domain_name" => "#{domain}",
+                "ldap_hostname" => "#{hostname_ldap}",
+                "ldap_fqdn" => "#{ldap_fqdn_name}",
                 "certificate_subject" => "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{portal_fqdn_name}",
                 "certificate_dest" => "/etc/ldap/ldap-server.pem",
                 "certificate_key_dest" => "/etc/ldap/ldap-server.key",
