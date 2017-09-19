@@ -140,19 +140,11 @@
   with_fileglob:
     - ../templates/*.ldif.j2
 
-- name: Create self-signed certificates
+- name: Create certificate for LDAP
   include_role:
     name: certificate
-
-- name: Copy ldap pub key
-  copy:
-    src: "{{ ca_certs_path }}/{{ ldap_server }}.pem"
-    dest: /etc/ssl/certs/ldap.example.org.pem
-
-- name: Copy private key
-  copy:
-    src: "{{ ca_private_path }}/{{ ldap_server }}.key"
-    dest: /etc/ssl/private/ldap.example.org.key
+  vars:
+    certificate_ca: "{{ ldap_certificate_type }}"
 
 - name: Create new Diffie Hellman parameters (takes a long time...)
   command: >
@@ -198,6 +190,10 @@
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
   when: emptyDIT.stdout == ""
+
+- name: Add openldap to ssl-cert group
+  command:
+    gpasswd -a openldap ssl-cert
 
 - name: Restart slapd
   service:
