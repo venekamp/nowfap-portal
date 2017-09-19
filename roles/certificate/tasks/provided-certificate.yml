@@ -1,0 +1,11 @@
+---
+
+- name: Copy certificate
+  copy:
+    src: "{{ data_dir }}/{{ ldap_domain_name }}/hosts/{{ ldap_hostname }}/certs/{{ ldap_fqdn }}.pem"
+    dest: /etc/ssl/certs/{{ ldap_fqdn }}.pem
+
+- name: Copy private key
+  copy:
+    src: "{{ data_dir }}/{{ ldap_domain_name }}/hosts/{{ ldap_hostname }}/certs/{{ ldap_fqdn }}.key"
+    dest: /etc/ssl/private/{{ ldap_fqdn }}.key

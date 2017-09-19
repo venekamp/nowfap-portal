@@ -10,8 +10,20 @@ certbot_arguments:
 
 certificate_files:
   - { src: "/etc/letsencrypt/live/{{ sp_hostname }}/cert.pem",
-      dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"
-    }
+      dest: "/etc/ssl/certs/{{ sp_hostname }}.pem" }
   - { src: "/etc/letsencrypt/live/{{ sp_hostname }}/privkey.pem",
-     dest: "/etc/ssl/private/{{ sp_hostname }}.key"
-    }
+      dest: "/etc/ssl/private/{{ sp_hostname }}.key" }
+
+group_ownerships:
+  - { path: "/etc/letsencrypt", group: "ssl-cert", mode: "0750",
+      state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/archive", group: "ssl-cert", mode: "0750",
+      state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/archive/{{ sp_hostname }}",
+      group: "ssl-cert", mode: "0640" , state: "directory", recurse: "yes" }
+  - { path: "/etc/letsencrypt/archive/{{ sp_hostname }}",
+      group: "ssl-cert", mode: "0750" , state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/live", group: "ssl-cert", mode: "0755",
+      state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/live/{{ sp_hostname }}", group: "ssl-cert", mode: "0750",
+      state: "directory", recurse: "no" }
