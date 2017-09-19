@@ -4,7 +4,7 @@
   include_vars:
     file: open_ports.yml
 
-- name: Ensure https port open
+- name: Ensure ports are open on the firewall
   ufw:
     state: enabled
     rule: allow
