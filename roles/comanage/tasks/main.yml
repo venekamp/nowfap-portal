@@ -150,7 +150,7 @@
     ./Console/cake setup --admin-given-name "{{ comanage_admin_given_name }}"
     --admin-family-name "{{ comanage_admin_family_name }} "
     --admin-username "{{ comanage_admin_username }}"
-    --enable-pooling="{{ comanage_enable_pooling }}"
+    --enable-pooling=No
   args:
     chdir: "{{ registry_path }}/app"
   when: registery_cm_users_table_exists.stdout == "0"
