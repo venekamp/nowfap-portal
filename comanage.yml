@@ -8,8 +8,9 @@
   become: True
 
   roles:
+    - { role: firewall,    tags: firewall    }
     - { role: common,      tags: common      }
-    - { role: certificate, tags: certificate }
+    - { role: zerotier,    tags: zerotier    }
     - { role: auth_mellon, tags: auth_mellon }
     - { role: php,         tags: php         }
     - { role: surfconext,  tags: surfconext  }
@@ -33,10 +34,10 @@
   roles:
     - { role: phpldapadmin, tags: phpldapadmin }
 
-- hosts:
-  - ssh-access
-  become_user: root
-  become: True
+# - hosts:
+#   - ssh-access
+#   become_user: root
+#   become: True
 
-  roles:
-    - { role: sshd, tags: sshd }
+#   roles:
+#     - { role: sshd, tags: sshd }

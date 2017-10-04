@@ -6,11 +6,11 @@ objectClass: dcObject
 objectClass: organization
 
 dn: cn={{ ldap_admin }},{{ ldap_basedn }}
-cn: admin
+cn: {{ ldap_admin }}
 objectClass: organizationalRole
 
 # Create the organisational unit (ou) group, which will contain all groups
-dn: ou=group,{{ ldap_basedn }}
+dn: ou=groups,{{ ldap_basedn }}
 ou: groups
 objectClass: top
 objectClass: organizationalUnit

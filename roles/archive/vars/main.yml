@@ -1,0 +1,5 @@
+---
+
+archives:
+  - { path: /etc/letsencrypt,      name: letsencrypt.tar.bz2  }
+  - { path: /var/lib/zerotier-one, name: zerotier-one.tar.bz2 }

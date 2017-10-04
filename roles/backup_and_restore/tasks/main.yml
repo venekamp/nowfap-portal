@@ -1,0 +1,5 @@
+---
+
+- name: Do not call this role through the main.yml
+  fail:
+    msg: The backup_and_restore role shoud not be called directly. Use specific roles instead.

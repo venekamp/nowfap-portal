@@ -3,6 +3,7 @@ packages:
   - slapd
   - ldap-utils
   - unzip
+  - ssl-cert
 
 remote_user_home: /home/{{ remote_user }}
 

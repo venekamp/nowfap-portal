@@ -9,12 +9,11 @@
     cache_valid_time: 360
   become: Yes
 
-- name: Ensure sshd is installed
+- name: Ensure ldap client is installed
   apt:
     name: "{{ item }}"
     state: present
   with_items:
-    - openssh-server
     - ldap-utils
   become: yes
 
@@ -46,12 +45,12 @@
 
 - name: Copy the CA certificate
   copy:
-    src: /etc/ssl/certs/example.org.pem
-    dest: /etc/ssl/certs/example.org.pem
+    src: ca/{{ domain_name }}/certs/{{ sp_fqdn }}.pem
+    dest: /usr/share/ca-certificates/{{ sp_fqdn }}.pem
 
 - name: Ensure the CA certificate is installed
   become_user: root
   become: True
-  command: update-ca-certifcates
+  command: update-ca-certificates
   tags:
     - skip_ansible_lint

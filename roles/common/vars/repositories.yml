@@ -10,3 +10,4 @@ removerepository:
 repositories:
   - deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
   - ppa:certbot/certbot
+  - ppa:jonathonf/zerotier

@@ -1,0 +1,4 @@
+---
+
+letsencrypt_backup: data/{{ sp_fqdn }}/letsencrypt.tar.bz2
+zerotier_backup: data/{{ sp_fqdn }}/zerotier-one.tar.bz2

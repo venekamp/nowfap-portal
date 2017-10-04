@@ -1,17 +1,31 @@
 ---
 
+letsencrypt_backup_name: letsencrypt.tar.bz2
+
 certbot_arguments:
   - certonly
   - --non-interactive
   - --{{ certbot_plugin }}
   - --agree-tos
   - --email {{ email_contact }}
-  - -d {{ sp_hostname }}
+  - -d {{ sp_fqdn }}
 
 certificate_files:
-  - { src: "/etc/letsencrypt/live/{{ sp_hostname }}/cert.pem",
-      dest: "/etc/ssl/certs/{{ sp_hostname }}.pem"
-    }
-  - { src: "/etc/letsencrypt/live/{{ sp_hostname }}/privkey.pem",
-     dest: "/etc/ssl/private/{{ sp_hostname }}.key"
-    }
+  - { src: "/etc/letsencrypt/live/{{ sp_fqdn }}/cert.pem",
+      dest: "/etc/ssl/certs/{{ sp_fqdn }}.pem" }
+  - { src: "/etc/letsencrypt/live/{{ sp_fqdn }}/privkey.pem",
+      dest: "/etc/ssl/private/{{ sp_fqdn }}.key" }
+
+group_ownerships:
+  - { path: "/etc/letsencrypt", group: "ssl-cert", mode: "0750",
+      state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/archive", group: "ssl-cert", mode: "0750",
+      state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/archive/{{ sp_fqdn }}",
+      group: "ssl-cert", mode: "0640" , state: "directory", recurse: "yes" }
+  - { path: "/etc/letsencrypt/archive/{{ sp_fqdn }}",
+      group: "ssl-cert", mode: "0750" , state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/live", group: "ssl-cert", mode: "0755",
+      state: "directory", recurse: "no" }
+  - { path: "/etc/letsencrypt/live/{{ sp_fqdn }}", group: "ssl-cert", mode: "0750",
+      state: "directory", recurse: "no" }

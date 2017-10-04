@@ -1,0 +1,4 @@
+---
+
+zerotier_backup_path: /var/lib/zerotier-one
+zerotier_backup_filename: zerotier-one.tar.bz2

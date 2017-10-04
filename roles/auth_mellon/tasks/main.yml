@@ -7,8 +7,8 @@
     scripts/mellon_create_metadata.sh -d {{ output_dir }}
     -n {{ entity_id }} {{ endpoint_url }} {{ given_name }}
     {{ surname }} {{ email_contact }} {{ organisation }}
-    {{ sp_protocol }}{{ sp_hostname }} "{{ service_description }}"
-    "{{ service_display_name }}"
+    {{ sp_protocol }}{{ sp_fqdn }} '{{ service_description }}'
+    '{{ service_display_name }}'
   become: false
 
 - name: Create a directory where auth_mellon can store data

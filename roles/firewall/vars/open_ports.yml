@@ -1,0 +1,8 @@
+---
+
+fw_ports:
+  - { port: "ssh",   proto: "tcp" }
+  - { port: "http",  proto: "tcp" }
+  - { port: "https", proto: "tcp" }
+  - { port: "ldaps", proto: "any" }
+  - { port: "9993",  proto: "udp" }

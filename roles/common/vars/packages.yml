@@ -1,6 +1,7 @@
 ---
 packages:
   - apache2
+  - dbus
   #  - certbot
   - ldap-utils
   - libapache2-mod-auth-mellon
@@ -23,6 +24,7 @@ packages:
   - software-properties-common
   - dnsutils
   - cron
+  - rsync
 
 packagesfastcgi:
   - libapache2-mod-fastcgi

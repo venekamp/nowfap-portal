@@ -1,0 +1,20 @@
+---
+
+- name: Ensure archives directory exists.
+  become_user: ubuntu
+  become: True
+  file:
+    path: archives
+    state: directory
+
+- name: Create archives
+  command: tar -cjf archives/{{ item.name }} {{ item.path }}
+  with_items: "{{ archives }}"
+  changed_when: False    # Archives will always be created and thus idempotency will fail.
+
+- name: Upload archives
+  synchronize:
+    mode: pull
+    src: archives/
+    dest: data/{{ sp_fqdn }}/
+  changed_when: False    # Archives will always be synced and thus idempotency will fail.

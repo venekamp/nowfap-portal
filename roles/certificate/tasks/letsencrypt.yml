@@ -1,12 +1,26 @@
 ---
 
-- name: debug
-  debug:
-    var:
-      certificate_ca
-
 - name: Include variables
   include_vars: "letsencrypt.yml"
+
+- name: Create backup of /etc/letsencrypt
+  include_role:
+    name: backup_and_restore
+    tasks_from: backup
+  vars:
+    backup_filename: letsencrypt.tar.bz2
+    backup_path: /etc/letsencrypt/
+
+- name: Restore from backup
+  include_role:
+    name: backup_and_restore
+    tasks_from: restore
+  vars:
+    backup_filename: "{{ letsencrypt_backup_name }}"
+
+- name: Failing
+  fail:
+    msg: Fail here.
 
 - name: Determine if Apache is running
   command: systemctl is-active apache2
@@ -26,7 +40,7 @@
   when: (apache2_active.stdout == 'inactive') or
         (apache2_active.stdout == 'failed')
 
-- name: Create a let's encrypt certificate
+- name: "Create a let's encrypt certificate"
   command: certbot {{ certbot_arguments | join(' ') }}
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
@@ -40,3 +54,33 @@
     - "{{ certificate_files }}"
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
+
+- name: Set group ownerships
+  file:
+    path: "{{ item.path }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    state: "{{ item.state }}"
+    recurse: "{{ item.recurse }}"
+  with_items:
+    - "{{ group_ownerships }}"
+
+- name: Copy chain certificates
+  copy:
+    src: /etc/letsencrypt/live/{{ sp_fqdn }}/chain.pem
+    dest: /usr/share/ca-certificates/letsencrypt-chain.crt
+    remote_src: yes
+
+- name: Mark Letsencrypt as a trusted CA
+  lineinfile:
+    path: /etc/ca-certificates.conf
+    line: letsencrypt-chain.crt
+
+- name: Make sure file permissions are correcet on copied cert
+  file:
+    path: /usr/share/ca-certificates/letsencrypt-chain.crt
+    mode: 0640
+
+- name: Install local CA certificates
+  command:
+    update-ca-certificates --verbose
