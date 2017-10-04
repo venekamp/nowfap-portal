@@ -21,7 +21,7 @@ hostname_ssh        = "ssh"
 start_ip_address    = IPAddr.new('192.168.64.10')
 
 # These values, amongst others, are used to create the SP metadata
-domain              = "example.org"
+domain_name         = "example.org"
 given_name          = "John"
 surname             = "Doe"
 email               = "john.doe@example.org"
@@ -38,11 +38,11 @@ ssl_cert_days_valid = 365
 
 # The credentials for the admin user in LDAP
 ldap_admin          = "admin"
-ldap_passwd         = "Please-change-me!"
+ldap_admin_passwd   = "Please-change-me!"
 
 # Where the CA, in case of self singed certificates, stores its
 # certificates and configuration files.
-cert_path = "ca/intermediate"
+cert_path           = "ca/intermediate"
 
 #####
 #
@@ -51,13 +51,13 @@ cert_path = "ca/intermediate"
 #####
 
 machinesNames       = Array[hostname_portal, hostname_ldap, hostname_ssh]
-portal_fqdn_name    = "#{machinesNames[0]}.#{domain}"
-ldap_fqdn_name      = "#{machinesNames[1]}.#{domain}"
-subject             = "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{ldap_fqdn_name}"
+portal_fqdn         = "#{machinesNames[0]}.#{domain_name}"
+ldap_fqdn           = "#{machinesNames[1]}.#{domain_name}"
+subject             = "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{ldap_fqdn}"
 
 #  Construct the ldap_basedn based on the domain variable.
 ldap_basedn = ""
-domainComponents = domain.split('.')
+domainComponents = domain_name.split('.')
 domainComponents.each_with_index do |dc, index|
     ldap_basedn = ldap_basedn + "dc=#{dc}"
     if index != (domainComponents.length - 1)
@@ -87,7 +87,7 @@ Vagrant.configure("2") do |config|
             vbox.name = "portal"
         end
         portal.vm.network "private_network", ip: "#{machineIP[hostname_portal]}"
-        portal.vm.hostname = "portal.#{domain}"
+        portal.vm.hostname = "portal.#{domain_name}"
    end
 
     config.vm.define "#{machinesNames[1]}" do |ldap|
@@ -96,7 +96,7 @@ Vagrant.configure("2") do |config|
             vbox.name = "ldap"
         end
         ldap.vm.network "private_network", ip: "#{machineIP[hostname_ldap]}"
-        ldap.vm.hostname = "ldap.#{domain}"
+        ldap.vm.hostname = "ldap.#{domain_name}"
    end
 
     config.vm.define "#{machinesNames[2]}" do |ssh|
@@ -105,7 +105,7 @@ Vagrant.configure("2") do |config|
             vbox.name = "ssh"
         end
         ssh.vm.network "private_network", ip: "#{machineIP[hostname_ssh]}"
-        ssh.vm.hostname = "ssh.#{domain}"
+        ssh.vm.hostname = "ssh.#{domain_name}"
     end
 
     config.vm.provision "ansible_local" do |ansible|
@@ -121,51 +121,37 @@ Vagrant.configure("2") do |config|
             "phpldapadmin" => ["#{machinesNames[0]}"],
 
             "all:vars" => {
-                "domain_name" => "#{domain}",
-                "sp_hostname" => "#{portal_fqdn_name}",
-                "ldap_server" => "#{ldap_fqdn_name}",
-                "email_contact" => "#{email}",
-                "organisation" => "#{organisation}",
-                "ldap_admin" => "#{ldap_admin}",
-                "ldap_admin_passwd" => "#{ldap_passwd}",
-                "ldap_basedn" => "#{ldap_basedn}",
-                "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}",
+                "domain_name" => "#{domain_name}",
                 "remote_user" => "ubuntu",
-                "ca_password" => "Chang3me3!",
-                "certs_path" => "#{cert_path}",
-                "ldap_server_name" => "#{ldap_fqdn_name}",
-                "data_dir" => "data"
+                "data_dir" => "data",
+                "ldap_fqdn" => "#{ldap_fqdn}",
+                "ldap_basedn" => "#{ldap_basedn}"
             },
             "comanage-portal:vars" => {
-                "hostname" => "#{portal_fqdn_name}",
+                "hostname" => "#{hostname_portal}",
+                "certificate_ca" => "provided",
+                "sp_fqdn" => "#{portal_fqdn}",
                 "sp_protocol" => "https://",
                 "sp_path" => "/registry/auth/sp",
                 "sp_random_part" => SecureRandom.uuid,
-                "service_description" => "#{service_description}",
-                "service_display_name" => "#{display_name}",
                 "given_name" => "#{given_name}",
                 "surname" => "#{surname}",
+                "email_contact" => "#{email}",
+                "organisation" => "#{organisation}",
+                "service_description" => "#{service_description}",
+                "service_display_name" => "#{display_name}",
                 "comanage_version" => "#{comanage_version}",
                 "comanage_admin_given_name" => "#{given_name}",
                 "comanage_admin_family_name" => "#{surname}",
-                "comanage_admin_username" => "admin",
-                "comanage_enable_pooling" => "yes",
-                "certificate_subject" => "#{subject}",
-                "certificate_ca" => "self-signed",
-                "certificate_days_valid" => "#{ssl_cert_days_valid}",
-                "certificate_key_dest" => "/etc/ssl/private/#{portal_fqdn_name}.key",
-                "certificate_dest" => "/etc/ssl/certs/#{portal_fqdn_name}.pem"
+                "comanage_admin_username" => "admin"
             },
             "ldap-server:vars" => {
-                "hostname" => "#{ldap_fqdn_name}",
-                "ldap_certificate_type" => "provided",
-                "ldap_domain_name" => "#{domain}",
-                "ldap_hostname" => "#{hostname_ldap}",
-                "ldap_fqdn" => "#{ldap_fqdn_name}",
-                "certificate_subject" => "/C=#{country}/ST=#{state}/L=#{locality}/O='#{organisation}'/OU=#{organisation_unit}/CN=#{portal_fqdn_name}",
-                "certificate_dest" => "/etc/ldap/ldap-server.pem",
-                "certificate_key_dest" => "/etc/ldap/ldap-server.key",
-                "certificate_days_valid" => 365,
+                "hostname" => "#{hostname_ldap}",
+                "certificate_ca" => "provided",
+                "ldap_admin" => "#{ldap_admin}",
+                "ldap_admin_passwd" => "#{ldap_admin_passwd}",
+                "organisation" => "#{organisation}",
+                "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}",
            }
         }
     end
