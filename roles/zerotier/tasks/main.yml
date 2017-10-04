@@ -1,0 +1,31 @@
+---
+
+- name: Ensure Zerotier-One is installed
+  apt:
+    name: zerotier-one
+    state: present
+
+- name: Restore Zerotier-One configuration
+  include_role:
+    name: backup_and_restore
+    tasks_from: restore
+  vars:
+    backup_path: "{{ zerotier_backup_path }}"
+    backup_filename: "{{ zerotier_backup_filename }}"
+
+- name: Restart Zerotier-One client
+  systemd:
+    name: zerotier-one
+    state: restarted
+
+- name: Join VPN network
+  command: zerotier-cli join {{ zerotier_network_id }}
+  when: zerotier_network_id is defined
+
+- name: Create Zerotier-One backup
+  include_role:
+    name: backup_and_restore
+    tasks_from: backup
+  vars:
+    backup_path: "{{ zerotier_backup_path }}"
+    backup_filename: "{{ zerotier_backup_filename }}"

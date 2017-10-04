@@ -25,7 +25,6 @@ packages:
   - dnsutils
   - cron
   - rsync
-  - zerotier-one
 
 packagesfastcgi:
   - libapache2-mod-fastcgi
