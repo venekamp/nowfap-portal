@@ -22,40 +22,29 @@ printUsage() {
 generate_key="yes"
 output_dir=""
 
-if [ "$#" -lt 2 ]; then
-    printUsage
-    exit 1
-fi
-
-args=$(getopt d:n $*)
-
-if [ "$?" != 0 ]
-then
-    printUsage
-    exit 2
-fi
-
-set -- $args
-for arg; do
-    case "$arg" in
-        -d)
-            #  What is the directory where the files must be written to.
-            output_dir="$2"
-            shift
+OPTIND=1
+while getopts :hd:n opt; do
+    case "$opt" in
+        h)
+            printUsage
+            exit 0
             ;;
-        -n)
+        d)
+            #  What is the directory where the files must be written to.
+            output_dir=$OPTARG
+            ;;
+        n)
             #  Do not generate a new key and cert pair, unless key does not exists.
             generate_key="no"
-            shift
             ;;
-        --)
-            shift
-            break
+        *)
+            printUsage
+            exit 1
             ;;
     esac
 done
 
-shift
+shift "$((OPTIND-1))"
 
 ENTITYID="$1"
 if [ -z "$ENTITYID" ]; then
