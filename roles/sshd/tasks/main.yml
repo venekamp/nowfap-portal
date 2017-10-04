@@ -45,8 +45,8 @@
 
 - name: Copy the CA certificate
   copy:
-    src: ca/{{ domain_name }}/certs/{{ sp_hostname }}.pem
-    dest: /usr/share/ca-certificates/{{ sp_hostname }}.pem
+    src: ca/{{ domain_name }}/certs/{{ sp_fqdn }}.pem
+    dest: /usr/share/ca-certificates/{{ sp_fqdn }}.pem
 
 - name: Ensure the CA certificate is installed
   become_user: root
