@@ -5,6 +5,11 @@
   static: no
   when: certificate_ca == "letsencrypt"
 
+- name: "Using provides certificates"
+  include: "provided-certificate.yml"
+  sratic: no
+  when: certificate_ca == "provided"
+
 - name: Using your own CA for self signed certificates
   include: "self-signed-certificate.yml"
   static: no

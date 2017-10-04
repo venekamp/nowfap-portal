@@ -4,6 +4,12 @@
 - name: Include variables
   include_vars: apache.yml
 
+- name: Apache needs a certificate. Get one.
+  include_role:
+    name: certificate
+  vars:
+    fqdn: "{{ sp_fqdn }}"
+
 #Uncomment for active php-fpm
 #- name: disable apache module
 #  apache2_module:

@@ -3,6 +3,25 @@
 - name: Include variables
   include_vars: "letsencrypt.yml"
 
+- name: Create backup of /etc/letsencrypt
+  include_role:
+    name: backup_and_restore
+    tasks_from: backup
+  vars:
+    backup_filename: letsencrypt.tar.bz2
+    backup_path: /etc/letsencrypt/
+
+- name: Restore from backup
+  include_role:
+    name: backup_and_restore
+    tasks_from: restore
+  vars:
+    backup_filename: "{{ letsencrypt_backup_name }}"
+
+- name: Failing
+  fail:
+    msg: Fail here.
+
 - name: Determine if Apache is running
   command: systemctl is-active apache2
   failed_when: false
@@ -48,7 +67,7 @@
 
 - name: Copy chain certificates
   copy:
-    src: /etc/letsencrypt/live/{{ sp_hostname }}/chain.pem
+    src: /etc/letsencrypt/live/{{ sp_fqdn }}/chain.pem
     dest: /usr/share/ca-certificates/letsencrypt-chain.crt
     remote_src: yes
 

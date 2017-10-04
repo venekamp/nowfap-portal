@@ -2,10 +2,23 @@
 
 - name: Copy certificate
   copy:
-    src: "{{ data_dir }}/{{ ldap_domain_name }}/hosts/{{ ldap_hostname }}/certs/{{ ldap_fqdn }}.pem"
-    dest: /etc/ssl/certs/{{ ldap_fqdn }}.pem
+    src: "{{ data_dir }}/{{ domain_name }}/certs/{{ fqdn }}.pem"
+    dest: /etc/ssl/certs/{{ fqdn }}.pem
 
 - name: Copy private key
   copy:
-    src: "{{ data_dir }}/{{ ldap_domain_name }}/hosts/{{ ldap_hostname }}/certs/{{ ldap_fqdn }}.key"
-    dest: /etc/ssl/private/{{ ldap_fqdn }}.key
+    src: "{{ data_dir }}/{{ domain_name }}/private/{{ fqdn }}.key"
+    dest: /etc/ssl/private/{{ fqdn }}.key
+
+- name: Copy SCZ certificate chain
+  copy:
+    src: "{{ data_dir }}/{{ domain_name }}/scz-chain.pem"
+    dest: /usr/share/ca-certificates/
+
+- name: Add certificate name to configuration
+  lineinfile:
+    path: /etc/ca-certificates.conf
+    line: scz-chain.pem
+
+- name: Install new certificates
+  command: update-ca-certificates
