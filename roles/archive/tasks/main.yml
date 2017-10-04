@@ -16,5 +16,5 @@
   synchronize:
     mode: pull
     src: archives/
-    dest: data/{{ sp_hostname }}/
+    dest: data/{{ sp_fqdn }}/
   changed_when: False    # Archives will always be synced and thus idempotency will fail.
