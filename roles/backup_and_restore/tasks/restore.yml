@@ -1,0 +1,17 @@
+---
+
+- name: Determine if a backup is available
+  become: False
+  stat:
+    path: "{{ backup_path_on_local_machine }}/{{ backup_filename }}"
+  register: backup_stats
+  delegate_to: localhost
+
+- name: Restore from backup
+  become: True
+  become_user: root
+  unarchive:
+    remote_src: no
+    src: "{{ backup_path_on_local_machine }}/{{ backup_filename }}"
+    dest: "{{ backup_path | dirname }}"
+  when: backup_stats.stat.exists == true

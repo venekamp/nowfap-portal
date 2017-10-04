@@ -1,0 +1,23 @@
+---
+
+- name: Make sure backup direcrory exists
+  file:
+    path: "{{ backup_dest }}"
+    mode: 0750
+    state: directory
+
+- name: debug
+  debug:
+    var: backup_path
+
+- name: Create backup {{ backup_filename }}
+  archive:
+    path: "{{ backup_path }}"
+    dest: "{{ backup_dest }}/{{ backup_filename }}"
+    format: bz2
+
+- name: Copy the created backup to the local machine
+  fetch:
+    src: "{{ backup_dest }}/{{ backup_filename }}"
+    dest: "{{ backup_path_on_local_machine }}/"
+    flat: yes

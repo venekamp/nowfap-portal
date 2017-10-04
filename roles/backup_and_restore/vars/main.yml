@@ -1,0 +1,4 @@
+---
+
+backup_path_on_local_machine: "{{ data_dir }}/{{ domain_name }}/hosts/{{ hostname }}/backups"
+backup_dest: "/home/{{ ansible_user }}/backups"
