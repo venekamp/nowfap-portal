@@ -3,13 +3,13 @@
 #######################################################################
 
 <VirtualHost *:80>
-    ServerName {{ sp_hostname }}
-    Redirect  "/" "https://{{ sp_hostname }}/"
+    ServerName {{ sp_fqdn }}
+    Redirect  "/" "https://{{ sp_fqdn }}/"
 </VirtualHost>
 
 <IfModule mod_ssl.c>
     <VirtualHost *:443>
-        ServerName {{ sp_hostname }}
+        ServerName {{ sp_fqdn }}
         ServerAdmin webmaster@localhost
 
         DocumentRoot /var/www/html
@@ -41,8 +41,8 @@
         #   SSLCertificateFile directive is needed.
         #SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
         #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
-        SSLCertificateFile    /etc/ssl/certs/{{ sp_hostname }}.pem
-        SSLCertificateKeyFile /etc/ssl/private/{{ sp_hostname }}.key
+        SSLCertificateFile    /etc/ssl/certs/{{ sp_fqdn }}.pem
+        SSLCertificateKeyFile /etc/ssl/private/{{ sp_fqdn }}.key
 
         #   Server Certificate Chain:
         #   Point SSLCertificateChainFile at a file containing the
