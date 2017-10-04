@@ -144,7 +144,7 @@
   include_role:
     name: certificate
   vars:
-    certificate_ca: "{{ ldap_certificate_type }}"
+    fqdn: "{{ ldap_fqdn }}"
 
 - name: Create new Diffie Hellman parameters (takes a long time...)
   command: >
@@ -170,26 +170,26 @@
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
-- name: Check if DIT has been created before
-  command: >
-    ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:///
-    -b "{{ ldap_basedn }}" "(ou=group)" dn
-  register: emptyDIT
-  failed_when: "emptyDIT.rc not in [0, 32]"
-  tags:
-    - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
+# - name: Check if DIT has been created before
+#   command: >
+#     ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:///
+#     -b "{{ ldap_basedn }}" "(ou=groups)" dn
+#   register: emptyDIT
+#   failed_when: "emptyDIT.rc not in [0, 32]"
+#   tags:
+#     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
 
 - name: Initialize DIT
   become_user: "{{ remote_user }}"
   become: True
   command: >
     ldapadd -c -x -D cn={{ ldap_admin }},{{ ldap_basedn }}
-    -w {{ ldap_admin_passwd }} -f {{ ldif_dir }}/initial_setup.ldif
+    -w '{{ ldap_admin_passwd }}' -f {{ ldif_dir }}/initial_setup.ldif
   register: result
   failed_when: "(result.rc not in [0, 68])"
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
-  when: emptyDIT.stdout == ""
+  # when: emptyDIT.stdout == ""
 
 - name: Add openldap to ssl-cert group
   command:
