@@ -124,9 +124,7 @@ Vagrant.configure("2") do |config|
                 "domain_name" => "#{domain_name}",
                 "remote_user" => "ubuntu",
                 "data_dir" => "data",
-                "ldap_fqdn" => "#{ldap_fqdn}",
-                "ldap_basedn" => "#{ldap_basedn}"
-            },
+           },
             "comanage-portal:vars" => {
                 "hostname" => "#{hostname_portal}",
                 "certificate_ca" => "provided",
@@ -145,12 +143,17 @@ Vagrant.configure("2") do |config|
                 "comanage_admin_family_name" => "#{surname}",
                 "comanage_admin_username" => "admin"
             },
-            "ldap-server:vars" => {
+            "ldap-group:children" => ["ldap-server", "phpldapadmin"],
+            "ldap-group:vars" => {
                 "hostname" => "#{hostname_ldap}",
+                "ldap_fqdn" => "#{ldap_fqdn}",
+                "ldap_basedn" => "#{ldap_basedn}",
+                "organisation" => "#{organisation}"
+            },
+            "ldap-server:vars" => {
                 "certificate_ca" => "provided",
                 "ldap_admin" => "#{ldap_admin}",
                 "ldap_admin_passwd" => "#{ldap_admin_passwd}",
-                "organisation" => "#{organisation}",
                 "ldap_rootdn" => "cn=#{ldap_admin},#{ldap_basedn}",
            }
         }
