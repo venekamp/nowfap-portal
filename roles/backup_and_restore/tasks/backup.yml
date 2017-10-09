@@ -6,10 +6,6 @@
     mode: 0750
     state: directory
 
-- name: debug
-  debug:
-    var: backup_path
-
 - name: Create backup {{ backup_filename }}
   archive:
     path: "{{ backup_path }}"
