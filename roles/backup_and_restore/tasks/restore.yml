@@ -7,6 +7,12 @@
   register: backup_stats
   delegate_to: localhost
 
+- name: Make sure destination exists
+  file:
+    path: "{{ backup_path }}"
+    state: directory
+  when: backup_stats.stat.exists == true
+
 - name: Restore from backup
   become: True
   become_user: root
