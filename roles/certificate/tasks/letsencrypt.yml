@@ -8,7 +8,7 @@
     name: backup_and_restore
     tasks_from: backup
   vars:
-    backup_filename: letsencrypt.tar.bz2
+    backup_filename: "{{ letsencrypt_backup_name }}"
     backup_path: /etc/letsencrypt/
 
 - name: Restore from backup
@@ -17,10 +17,7 @@
     tasks_from: restore
   vars:
     backup_filename: "{{ letsencrypt_backup_name }}"
-
-- name: Failing
-  fail:
-    msg: Fail here.
+    backup_path: /etc/letsencrypt
 
 - name: Determine if Apache is running
   command: systemctl is-active apache2
@@ -44,6 +41,14 @@
   command: certbot {{ certbot_arguments | join(' ') }}
   tags:
     - skip_ansible_lint   # Suppress ansible-lint warning [ANSIBLE0012]
+
+- name: "Create Let's Encrypt backup"
+  include_role:
+    name: backup_and_restore
+    tasks_from: backup
+  vars:
+    backup_path: "{{ letsencrypt_backup_path }}"
+    backup_filename: "{{ letsencrypt_backup_name }}"
 
 - name: Link to certificate
   file:
