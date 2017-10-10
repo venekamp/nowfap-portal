@@ -9,7 +9,6 @@
   vars:
     backup_path: "{{ mellon_backup_path }}"
     backup_filename: "{{ mellon_backup_name }}"
-  register: metadata_restored
 
 - name: Create metadata
   become: false
