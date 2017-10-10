@@ -1,4 +1,8 @@
 ---
+
+mellon_backup_path: /etc/apache2/mellon
+mellon_backup_name: mellon.tar.bz2
+
 output_dir: "/home/ubuntu/auth_mellon"
 endpoint_url: "{{sp_protocol }}{{ sp_fqdn }}/{{ sp_path }}"
 entity_id: "{{ endpoint_url }}/metadata{% if sp_random_part is defined %}-\
