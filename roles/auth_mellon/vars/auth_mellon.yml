@@ -1,7 +1,12 @@
 ---
 
-mellon_backup_path: /etc/apache2/mellon
+mellon_path: /etc/apache2/mellon
+
 mellon_backup_name: mellon.tar.bz2
+
+sp_metadata: "{{ mellon_path }}/sp-metadata.xml"
+sp_key: "{{ mellon_path }}/sp-private-key.pem"
+sp_cert: "{{ mellon_path }}/sp-cert.pem"
 
 output_dir: "/home/ubuntu/auth_mellon"
 endpoint_url: "{{sp_protocol }}{{ sp_fqdn }}/{{ sp_path }}"
@@ -10,15 +15,15 @@ entity_id: "{{ endpoint_url }}/metadata{% if sp_random_part is defined %}-\
 
 sp_files:
   - { src: "{{ output_dir }}/{{ sp_fqdn }}.xml",
-      dest: "/etc/apache2/mellon/sp-metadata.xml",
+  dest: "{{ sp_metadata }}",
       mode: "0644"
     }
   - { src: "{{ output_dir }}/{{ sp_fqdn }}.key",
-      dest: "/etc/apache2/mellon/sp-private-key.pem",
+      dest: "{{ sp_key }}",
       mode: "0600"
     }
   - { src: "{{ output_dir }}/{{ sp_fqdn }}.cert",
-      dest: "/etc/apache2/mellon/sp-cert.pem",
+      dest: "{{ sp_cert }}",
       mode: "0600"
     }
 
