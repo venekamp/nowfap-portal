@@ -2,14 +2,48 @@
 - name: Include variables
   include_vars: "auth_mellon.yml"
 
+- name: Create a directory metadata for auth_mellon is stored
+  file:
+    path: /etc/apache2/mellon
+    state: directory
+    owner: www-data
+    mode: 0700
+
+- name: Restore SP metadata
+  include_role:
+    name: backup_and_restore
+    tasks_from: restore
+  vars:
+    backup_path: "{{ mellon_path }}"
+    backup_filename: "{{ mellon_backup_name }}"
+  notify:
+    - Restart Apache
+
+- name: Does metadata exist
+  stat:
+    path: "{{ sp_metadata }}"
+  register: metadata
+
 - name: Create metadata
+  become: false
   script: >
     scripts/mellon_create_metadata.sh -d {{ output_dir }}
     -n {{ entity_id }} {{ endpoint_url }} {{ given_name }}
     {{ surname }} {{ email_contact }} {{ organisation }}
     {{ sp_protocol }}{{ sp_fqdn }} '{{ service_description }}'
     '{{ service_display_name }}'
-  become: false
+  args:
+    creates: "{{ output_dir }}/{{ hostname }}.{{ domain_name }}.xml"
+  when: metadata.stat is defined and not metadata.stat.exists
+
+- name: Backup SP metadata
+  include_role:
+    name: backup_and_restore
+    tasks_from: backup
+  vars:
+    backup_path: "{{ mellon_path }}"
+    backup_filename: "{{ mellon_backup_name }}"
+  when: metadata.stat is defined and not metadata.stat.exists
 
 - name: Create a directory where auth_mellon can store data
   file:
@@ -17,13 +51,6 @@
     state: directory
     owner: www-data
     mode: 0755
-
-- name: Create a directory metadata for auth_mellon is stored
-  file:
-    path: /etc/apache2/mellon
-    state: directory
-    owner: www-data
-    mode: 0700
 
 - name: Copy auth_mellon files
   template:
@@ -41,5 +68,6 @@
     owner: www-data
     mode: "{{ item.mode }}"
   with_items: "{{ sp_files }}"
+  when: metadata.stat is defined and not metadata.stat.exists
   notify:
     - Restart Apache

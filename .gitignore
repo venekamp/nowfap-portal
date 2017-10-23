@@ -4,6 +4,7 @@
 .molecule
 .tox
 __pycache__
+virtenv
 
 # What root level files and/or directories should be ignored
 /ca/

@@ -1,5 +1,6 @@
 ---
 packages:
+  - acl
   - apache2
   - dbus
   #  - certbot
@@ -25,6 +26,7 @@ packages:
   - dnsutils
   - cron
   - rsync
+  - unzip
 
 packagesfastcgi:
   - libapache2-mod-fastcgi

@@ -1,5 +1,6 @@
 ---
 
+letsencrypt_backup_path: /etc/letsencrypt
 letsencrypt_backup_name: letsencrypt.tar.bz2
 
 certbot_arguments:

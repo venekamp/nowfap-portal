@@ -10,6 +10,11 @@
   with_items: "{{ packages  }}"
   become: Yes
 
+- name: Copy Apparmor user profile
+  copy:
+    src: files/usr.sbin.slapd
+    dest: /etc/apparmor.d/local/
+
 - name: Starting slapd service
   service:
     name: slapd
